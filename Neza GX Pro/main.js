@@ -17,10 +17,12 @@ app.commandLine.appendSwitch('--enable-zero-copy');
 log.transports.file.level = 'info';
 log.info('Iniciando Nexa Browser...');
 
+// Variables globales
 let mainWindow;
 let welcomeWindow = null;
 let updateAvailable = false;
-const CURRENT_VERSION = '2.1.0';
+const CURRENT_VERSION = '2.2.0';
+const isDev = !app.isPackaged;
 
 function createWindow() {
     // Verificar si es la primera vez o nueva versión
