@@ -8979,10 +8979,20 @@
                 .catch(error => {
                     clearInterval(checkingInterval);
                     console.error('Error checking for updates:', error);
-                    showUpdateState('error');
-                    document.getElementById('errorMessage').textContent = 
-                        'No se pudo conectar con GitHub. Verifica tu conexión a internet.';
-                    document.getElementById('errorDetails').textContent = error.message;
+                    
+                    // Si el error es 404, probablemente no hay releases aún
+                    if (error.message && error.message.includes('404')) {
+                        // Mostrar como actualizado en lugar de error
+                        showUpdateState('upToDate');
+                        document.getElementById('currentVersion').textContent = CURRENT_VERSION;
+                        updateStatus('✅ Estás usando la última versión disponible');
+                    } else {
+                        // Otros errores (red, etc.)
+                        showUpdateState('error');
+                        document.getElementById('errorMessage').textContent = 
+                            'No se pudo conectar con GitHub. Verifica tu conexión a internet.';
+                        document.getElementById('errorDetails').textContent = error.message;
+                    }
                 });
         }
 

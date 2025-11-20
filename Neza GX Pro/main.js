@@ -116,19 +116,51 @@ function createMainWindow() {
     });
 
     // Cargar navegador con página de inicio personalizada
-    mainWindow.loadFile('neza-app.html');
+    const htmlPath = path.join(__dirname, 'neza-app.html');
+    log.info('📂 Cargando neza-app.html desde:', htmlPath);
+    
+    mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription) => {
+        log.error('❌ Error al cargar neza-app.html:', errorCode, errorDescription);
+    });
+    
+    mainWindow.webContents.on('did-finish-load', () => {
+        log.info('✅ neza-app.html cargado completamente');
+    });
+    
+    mainWindow.loadFile(htmlPath).catch(err => {
+        log.error('❌ Error en loadFile:', err);
+    });
 
     mainWindow.once('ready-to-show', () => {
+        log.info('👁️ Ventana lista para mostrar');
         mainWindow.show();
+        mainWindow.focus();
+        log.info('✅ Ventana mostrada y enfocada');
         
         // Buscar actualizaciones después de mostrar
         setTimeout(() => {
             checkForUpdates();
         }, 2000);
     });
+    
+    // Forzar mostrar después de 3 segundos si no se dispara ready-to-show
+    setTimeout(() => {
+        if (mainWindow && !mainWindow.isVisible()) {
+            log.warn('⚠️ Ventana no visible, forzando mostrar...');
+            mainWindow.show();
+            mainWindow.focus();
+        }
+    }, 3000);
 
     mainWindow.on('closed', () => {
         mainWindow = null;
+    });
+    
+    // Log de errores del renderer
+    mainWindow.webContents.on('console-message', (event, level, message, line, sourceId) => {
+        if (level === 3) { // Error
+            log.error(`[Renderer Error] ${message} (${sourceId}:${line})`);
+        }
     });
 
     mainWindow.webContents.setWindowOpenHandler(({ url }) => {

@@ -9,11 +9,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 // API segura para el renderer
 contextBridge.exposeInMainWorld('electronAPI', {
     // Ventana de bienvenida
-    closeWelcome: () => {
-        if (window.close) {
-            window.close();
-        }
-    },
+    closeWelcome: () => ipcRenderer.invoke('close-welcome'),
     
     // Sistema de actualizaciones
     checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
