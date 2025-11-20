@@ -161,16 +161,36 @@ function saveVersionSeen() {
 
 // Configuración del Auto-Updater
 function setupAutoUpdater() {
-    // Configurar servidor de actualizaciones
-    autoUpdater.setFeedURL({
-        provider: 'github',
-        owner: 'H1C0d3',
-        repo: 'Neza-GX-Pro'
-    });
+    // Log detallado de configuración
+    log.info('⚙️ Configurando Auto-Updater...');
+    log.info('📦 Versión actual:', CURRENT_VERSION);
+    log.info('🏭 Entorno:', process.env.NODE_ENV || 'production');
+    log.info('🔒 isDev:', isDev);
+    
+    // Configurar servidor de actualizaciones con opciones explícitas
+    try {
+        autoUpdater.setFeedURL({
+            provider: 'github',
+            owner: 'H1C0d3',
+            repo: 'Neza-GX-Pro',
+            private: false,
+            releaseType: 'release' // Solo releases públicas, no pre-releases
+        });
+        log.info('✅ Feed URL configurado correctamente');
+        log.info('🔗 Repositorio: https://github.com/H1C0d3/Neza-GX-Pro');
+    } catch (error) {
+        log.error('❌ Error al configurar Feed URL:', error);
+    }
+
+    // Configurar logger del auto-updater
+    autoUpdater.logger = log;
+    autoUpdater.autoDownload = false; // Descargar solo cuando el usuario lo pida
+    autoUpdater.autoInstallOnAppQuit = true;
 
     // Eventos del auto-updater
     autoUpdater.on('checking-for-update', () => {
-        log.info('🔍 Buscando actualizaciones...');
+        log.info('🔍 Buscando actualizaciones en GitHub...');
+        log.info('🔗 Verificando: https://api.github.com/repos/H1C0d3/Neza-GX-Pro/releases/latest');
         sendToRenderer('update-checking');
     });
 
@@ -188,12 +208,22 @@ function setupAutoUpdater() {
 
     autoUpdater.on('update-not-available', (info) => {
         log.info('ℹ️ No hay actualizaciones disponibles');
+        log.info('📊 Info:', JSON.stringify(info));
+        log.info('✅ Estás usando la última versión:', CURRENT_VERSION);
         sendToRenderer('update-not-available');
     });
 
     autoUpdater.on('error', (err) => {
         log.error('❌ Error en auto-updater:', err);
-        sendToRenderer('update-error', err.message);
+        log.error('📋 Detalles del error:', err.message);
+        log.error('🔍 Stack:', err.stack);
+        
+        // Enviar error detallado al renderer
+        sendToRenderer('update-error', {
+            message: err.message,
+            code: err.code || 'UNKNOWN',
+            details: err.toString()
+        });
     });
 
     autoUpdater.on('download-progress', (progressObj) => {
@@ -215,11 +245,27 @@ function setupAutoUpdater() {
 }
 
 function checkForUpdates() {
-    if (process.env.NODE_ENV !== 'development') {
-        autoUpdater.checkForUpdatesAndNotify();
+    log.info('🔄 Iniciando verificación de actualizaciones...');
+    log.info('📦 Versión instalada:', app.getVersion());
+    log.info('🌐 Verificando GitHub Releases...');
+    
+    // SIEMPRE verificar actualizaciones en producción empaquetada
+    if (app.isPackaged) {
+        log.info('📦 Aplicación empaquetada detectada - Verificando actualizaciones');
+        try {
+            autoUpdater.checkForUpdates()
+                .then((result) => {
+                    log.info('✅ Verificación completada:', JSON.stringify(result));
+                })
+                .catch((error) => {
+                    log.error('❌ Error al verificar actualizaciones:', error);
+                });
+        } catch (error) {
+            log.error('❌ Excepción al verificar actualizaciones:', error);
+        }
     } else {
         log.info('🚧 Modo desarrollo: Auto-updater deshabilitado');
-        // Simular que no hay actualizaciones en desarrollo
+        log.info('💡 Para probar actualizaciones, compila el instalador con BUILD-SIMPLE.bat');
         setTimeout(() => {
             sendToRenderer('update-not-available');
         }, 1000);
@@ -482,6 +528,12 @@ app.whenReady().then(() => {
     
     setupAutoUpdater();
     createWindow();
+    
+    // Verificar actualizaciones al iniciar (después de 5 segundos)
+    setTimeout(() => {
+        log.info('🚀 Verificando actualizaciones automáticamente...');
+        checkForUpdates();
+    }, 5000);
     
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {

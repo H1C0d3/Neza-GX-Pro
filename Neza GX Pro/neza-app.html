@@ -2375,7 +2375,7 @@
             border: none;
             border-radius: 8px 8px 0 0;
             color: #ffffff;
-            cursor: pointer;
+            cursor: move;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -2386,6 +2386,93 @@
             overflow: hidden;
             position: relative;
             gap: 4px;
+        }
+
+        .tab.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+        }
+
+        .tab.drag-over {
+            border-left: 3px solid var(--neza-primary);
+        }
+
+        /* Menú contextual de pestañas */
+        .tab-context-menu {
+            position: fixed;
+            background: linear-gradient(145deg, #2a2a2a, #1f1f1f);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 212, 170, 0.2);
+            z-index: 10000;
+            min-width: 220px;
+            padding: 6px 0;
+            display: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+
+        .tab-context-menu.show {
+            display: block;
+            animation: contextMenuShow 0.2s ease-out;
+        }
+
+        @keyframes contextMenuShow {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-5px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .tab-context-menu-item {
+            padding: 10px 16px;
+            color: #ffffff;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .tab-context-menu-item:hover {
+            background: linear-gradient(90deg, rgba(0, 212, 170, 0.15), transparent);
+            border-left-color: var(--neza-primary);
+            padding-left: 20px;
+        }
+
+        .tab-context-menu-item.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .tab-context-menu-item.disabled:hover {
+            background: transparent;
+            border-left-color: transparent;
+            padding-left: 16px;
+        }
+
+        .tab-context-menu-separator {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0, 212, 170, 0.2), transparent);
+            margin: 6px 0;
+        }
+
+        .tab-context-menu-item-icon {
+            width: 18px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .tab-context-menu-item-shortcut {
+            margin-left: auto;
+            font-size: 11px;
+            opacity: 0.5;
+            font-family: monospace;
         }
 
         .tab .tab-title {
@@ -5764,6 +5851,47 @@
             </div>
         </div>
 
+        <!-- Menú contextual de pestañas -->
+        <div class="tab-context-menu" id="tabContextMenu">
+            <div class="tab-context-menu-item" onclick="contextReloadTab()">
+                <span class="tab-context-menu-item-icon">🔄</span>
+                <span>Recargar</span>
+                <span class="tab-context-menu-item-shortcut">Ctrl+R</span>
+            </div>
+            <div class="tab-context-menu-item" onclick="contextDuplicateTab()">
+                <span class="tab-context-menu-item-icon">📑</span>
+                <span>Duplicar pestaña</span>
+            </div>
+            <div class="tab-context-menu-separator"></div>
+            <div class="tab-context-menu-item" onclick="contextPinTab()">
+                <span class="tab-context-menu-item-icon">📌</span>
+                <span>Fijar pestaña</span>
+            </div>
+            <div class="tab-context-menu-item" onclick="contextMuteTab()">
+                <span class="tab-context-menu-item-icon">🔇</span>
+                <span id="contextMuteText">Silenciar pestaña</span>
+            </div>
+            <div class="tab-context-menu-separator"></div>
+            <div class="tab-context-menu-item" onclick="contextCloseTab()">
+                <span class="tab-context-menu-item-icon">❌</span>
+                <span>Cerrar</span>
+                <span class="tab-context-menu-item-shortcut">Ctrl+W</span>
+            </div>
+            <div class="tab-context-menu-item" onclick="contextCloseOtherTabs()">
+                <span class="tab-context-menu-item-icon">🗑️</span>
+                <span>Cerrar las demás pestañas</span>
+            </div>
+            <div class="tab-context-menu-item" onclick="contextCloseTabsToRight()">
+                <span class="tab-context-menu-item-icon">➡️</span>
+                <span>Cerrar pestañas a la derecha</span>
+            </div>
+            <div class="tab-context-menu-separator"></div>
+            <div class="tab-context-menu-item" onclick="contextCopyUrl()">
+                <span class="tab-context-menu-item-icon">🔗</span>
+                <span>Copiar dirección de la página</span>
+            </div>
+        </div>
+
         <!-- Music Control Panel -->
         <div class="music-panel-overlay" id="musicPanelOverlay" style="display: none;">
             <div class="music-panel" id="musicPanel">
@@ -7802,7 +7930,263 @@
                 });
                 // Asegurar que la pestaña activa esté visible
                 forceTabVisibility();
+                // Configurar drag & drop y menú contextual
+                setupTabDragAndDrop();
+                setupTabContextMenu();
             }, 100);
+        }
+
+        // ============ DRAG & DROP DE PESTAÑAS ============
+        let draggedTab = null;
+        let draggedTabId = null;
+
+        function setupTabDragAndDrop() {
+            const tabElements = document.querySelectorAll('.tab');
+            
+            tabElements.forEach(tabEl => {
+                tabEl.setAttribute('draggable', 'true');
+                
+                tabEl.addEventListener('dragstart', (e) => {
+                    draggedTab = tabEl;
+                    draggedTabId = parseInt(tabEl.dataset.tabId);
+                    tabEl.classList.add('dragging');
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/html', tabEl.innerHTML);
+                });
+                
+                tabEl.addEventListener('dragend', (e) => {
+                    tabEl.classList.remove('dragging');
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('drag-over'));
+                    draggedTab = null;
+                    draggedTabId = null;
+                });
+                
+                tabEl.addEventListener('dragover', (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    
+                    if (draggedTab && draggedTab !== tabEl) {
+                        tabEl.classList.add('drag-over');
+                    }
+                });
+                
+                tabEl.addEventListener('dragleave', (e) => {
+                    tabEl.classList.remove('drag-over');
+                });
+                
+                tabEl.addEventListener('drop', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    tabEl.classList.remove('drag-over');
+                    
+                    if (draggedTabId && draggedTab !== tabEl) {
+                        const targetTabId = parseInt(tabEl.dataset.tabId);
+                        reorderTabs(draggedTabId, targetTabId);
+                    }
+                });
+            });
+        }
+
+        function reorderTabs(sourceId, targetId) {
+            const sourceIndex = tabs.findIndex(t => t.id === sourceId);
+            const targetIndex = tabs.findIndex(t => t.id === targetId);
+            
+            if (sourceIndex !== -1 && targetIndex !== -1) {
+                // Remover pestaña de posición original
+                const [movedTab] = tabs.splice(sourceIndex, 1);
+                
+                // Insertar en nueva posición
+                tabs.splice(targetIndex, 0, movedTab);
+                
+                renderTabs();
+                updateStatus(`Pestaña reordenada: ${movedTab.title}`);
+            }
+        }
+
+        // ============ MENÚ CONTEXTUAL DE PESTAÑAS ============
+        let contextMenuTabId = null;
+
+        function setupTabContextMenu() {
+            const tabElements = document.querySelectorAll('.tab');
+            const contextMenu = document.getElementById('tabContextMenu');
+            
+            tabElements.forEach(tabEl => {
+                tabEl.addEventListener('contextmenu', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    contextMenuTabId = parseInt(tabEl.dataset.tabId);
+                    showTabContextMenu(e.clientX, e.clientY);
+                });
+            });
+            
+            // Cerrar menú al hacer clic fuera
+            document.addEventListener('click', () => {
+                hideTabContextMenu();
+            });
+        }
+
+        function showTabContextMenu(x, y) {
+            const contextMenu = document.getElementById('tabContextMenu');
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            
+            if (!tab) return;
+            
+            // Actualizar texto de silenciar
+            const muteText = document.getElementById('contextMuteText');
+            if (tab.isMuted) {
+                muteText.textContent = 'Activar sonido de pestaña';
+            } else {
+                muteText.textContent = 'Silenciar pestaña';
+            }
+            
+            // Posicionar menú
+            contextMenu.style.left = x + 'px';
+            contextMenu.style.top = y + 'px';
+            contextMenu.classList.add('show');
+            
+            // Ajustar si se sale de la pantalla
+            setTimeout(() => {
+                const rect = contextMenu.getBoundingClientRect();
+                if (rect.right > window.innerWidth) {
+                    contextMenu.style.left = (x - rect.width) + 'px';
+                }
+                if (rect.bottom > window.innerHeight) {
+                    contextMenu.style.top = (y - rect.height) + 'px';
+                }
+            }, 10);
+        }
+
+        function hideTabContextMenu() {
+            const contextMenu = document.getElementById('tabContextMenu');
+            contextMenu.classList.remove('show');
+        }
+
+        // Funciones del menú contextual
+        function contextReloadTab() {
+            hideTabContextMenu();
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            if (tab && tab.webview) {
+                tab.webview.reload();
+                updateStatus('Pestaña recargada');
+            }
+        }
+
+        function contextDuplicateTab() {
+            hideTabContextMenu();
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            if (tab) {
+                tabCounter++;
+                const duplicatedTab = {
+                    id: tabCounter,
+                    title: tab.title,
+                    url: tab.url,
+                    isActive: false,
+                    webview: null,
+                    history: [...tab.history],
+                    historyIndex: tab.historyIndex,
+                    hasAudio: false,
+                    isMuted: tab.isMuted,
+                    isPrivate: tab.isPrivate,
+                    isStealthMode: tab.isStealthMode,
+                    stealthLayer: tab.stealthLayer,
+                    privacyLayer: tab.privacyLayer
+                };
+                
+                // Insertar después de la pestaña original
+                const originalIndex = tabs.findIndex(t => t.id === contextMenuTabId);
+                tabs.splice(originalIndex + 1, 0, duplicatedTab);
+                
+                // Crear webview si tiene URL
+                if (duplicatedTab.url) {
+                    duplicatedTab.webview = createWebviewForTab(duplicatedTab.id);
+                    setTimeout(() => {
+                        if (duplicatedTab.webview) {
+                            duplicatedTab.webview.src = duplicatedTab.url;
+                        }
+                    }, 100);
+                }
+                
+                renderTabs();
+                updateStatus(`Pestaña duplicada: ${tab.title}`);
+            }
+        }
+
+        function contextPinTab() {
+            hideTabContextMenu();
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            if (tab) {
+                tab.isPinned = !tab.isPinned;
+                renderTabs();
+                updateStatus(tab.isPinned ? 'Pestaña fijada' : 'Pestaña desfijada');
+            }
+        }
+
+        function contextMuteTab() {
+            hideTabContextMenu();
+            toggleTabAudioSimple(contextMenuTabId);
+        }
+
+        function contextCloseTab() {
+            hideTabContextMenu();
+            closeTab(contextMenuTabId);
+        }
+
+        function contextCloseOtherTabs() {
+            hideTabContextMenu();
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            if (!tab) return;
+            
+            const otherTabs = tabs.filter(t => t.id !== contextMenuTabId);
+            otherTabs.forEach(t => {
+                if (t.webview) {
+                    t.webview.remove();
+                }
+            });
+            
+            tabs = [tab];
+            activeTabId = tab.id;
+            tab.isActive = true;
+            
+            renderTabs();
+            updateStatus('Otras pestañas cerradas');
+        }
+
+        function contextCloseTabsToRight() {
+            hideTabContextMenu();
+            const tabIndex = tabs.findIndex(t => t.id === contextMenuTabId);
+            if (tabIndex === -1) return;
+            
+            const tabsToClose = tabs.slice(tabIndex + 1);
+            tabsToClose.forEach(t => {
+                if (t.webview) {
+                    t.webview.remove();
+                }
+            });
+            
+            tabs = tabs.slice(0, tabIndex + 1);
+            
+            // Si cerramos la pestaña activa, activar la del menú
+            if (!tabs.find(t => t.id === activeTabId)) {
+                switchToTab(contextMenuTabId);
+            }
+            
+            renderTabs();
+            updateStatus('Pestañas a la derecha cerradas');
+        }
+
+        function contextCopyUrl() {
+            hideTabContextMenu();
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            if (tab && tab.url) {
+                navigator.clipboard.writeText(tab.url).then(() => {
+                    updateStatus('URL copiada al portapapeles');
+                }).catch(err => {
+                    console.error('Error al copiar URL:', err);
+                    updateStatus('❌ Error al copiar URL');
+                });
+            }
         }
 
         function getStealthTooltip(layer) {
