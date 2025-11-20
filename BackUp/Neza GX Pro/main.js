@@ -94,14 +94,9 @@ function createMainWindow() {
     // Guardar que ya vio la bienvenida de esta versión
     saveVersionSeen();
     
-    // Cargar estado guardado de la ventana
-    const windowState = loadWindowState();
-    
     mainWindow = new BrowserWindow({
-        x: windowState.x,
-        y: windowState.y,
-        width: windowState.width,
-        height: windowState.height,
+        width: 1280,
+        height: 800,
         minWidth: 800,
         minHeight: 600,
         frame: false,
@@ -119,17 +114,6 @@ function createMainWindow() {
         icon: path.join(__dirname, 'resourse', 'Nexa_Icono_PNG.png'),
         show: false
     });
-    
-    // Maximizar si estaba maximizado
-    if (windowState.isMaximized) {
-        mainWindow.maximize();
-    }
-    
-    // Guardar estado cuando cambie el tamaño o posición
-    mainWindow.on('resize', saveWindowState);
-    mainWindow.on('move', saveWindowState);
-    mainWindow.on('maximize', saveWindowState);
-    mainWindow.on('unmaximize', saveWindowState);
 
     // Cargar navegador con página de inicio personalizada
     // Usar URL en lugar de path para evitar problemas con espacios en Windows
@@ -176,7 +160,6 @@ function createMainWindow() {
     }, 3000);
 
     mainWindow.on('closed', () => {
-        saveWindowState();
         mainWindow = null;
     });
     
@@ -197,49 +180,6 @@ function createMainWindow() {
 
     if (process.env.NODE_ENV === 'development') {
         mainWindow.webContents.openDevTools();
-    }
-}
-
-function loadWindowState() {
-    try {
-        const statePath = path.join(app.getPath('userData'), 'window-state.json');
-        if (fs.existsSync(statePath)) {
-            const state = JSON.parse(fs.readFileSync(statePath, 'utf8'));
-            log.info('📋 Estado de ventana cargado:', state);
-            return state;
-        }
-    } catch (error) {
-        log.error('❌ Error cargando estado de ventana:', error);
-    }
-    
-    // Estado por defecto
-    return {
-        width: 1200,
-        height: 800,
-        x: undefined,
-        y: undefined,
-        isMaximized: false
-    };
-}
-
-function saveWindowState() {
-    try {
-        if (!mainWindow) return;
-        
-        const bounds = mainWindow.getBounds();
-        const state = {
-            width: bounds.width,
-            height: bounds.height,
-            x: bounds.x,
-            y: bounds.y,
-            isMaximized: mainWindow.isMaximized()
-        };
-        
-        const statePath = path.join(app.getPath('userData'), 'window-state.json');
-        fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
-        log.info('💾 Estado de ventana guardado');
-    } catch (error) {
-        log.error('❌ Error guardando estado de ventana:', error);
     }
 }
 

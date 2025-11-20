@@ -1,0 +1,78 @@
+{
+  "name": "neza-gx-pro",
+  "version": "2.2.0",
+  "description": "Navegador Gaming de Nueva Generación - Neza GX Pro",
+  "main": "main.js",
+  "author": "Hi Code Studio Tech & GEISA",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/H1C0d3/Neza-GX-Pro.git"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win"
+  },
+  "dependencies": {
+    "electron-updater": "^6.1.7",
+    "electron-log": "^5.1.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1"
+  },
+  "build": {
+    "appId": "com.hicode.nezagxpro",
+    "productName": "Neza GX Pro",
+    "copyright": "Copyright © 2024 Hi Code Studio Tech & GEISA",
+    "compression": "maximum",
+    "electronDownload": {
+      "cache": "${env.LOCALAPPDATA}/electron-cache"
+    },
+    "forceCodeSigning": false,
+    "directories": {
+      "output": "dist",
+      "buildResources": "resourse"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "neza-app.html",
+      "pages/**/*",
+      "resourse/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "resourse/icon.ico",
+      "artifactName": "Neza-GX-Pro-Setup-${version}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Neza GX Pro",
+      "installerIcon": "resourse/icon.ico",
+      "uninstallerIcon": "resourse/icon.ico",
+      "installerHeader": "resourse/installer-header.bmp",
+      "installerSidebar": "resourse/installer-sidebar.bmp",
+      "uninstallerSidebar": "resourse/installer-sidebar.bmp",
+      "license": "LICENSE.txt",
+      "perMachine": false,
+      "allowElevation": true,
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "menuCategory": false,
+      "displayLanguageSelector": false,
+      "warningsAsErrors": false,
+      "packElevateHelper": false,
+      "language": "2058"
+    }
+  }
+}

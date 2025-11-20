@@ -12800,16 +12800,7 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
 
             // Configurar todos los toggles
             setupToggle('showSidebar', (checked) => {
-                const sidebar = document.getElementById('nezaSidebar');
-                if (sidebar) {
-                    if (checked) {
-                        sidebar.style.display = 'flex';
-                        updateStatus('📂 Barra lateral activada');
-                    } else {
-                        sidebar.style.display = 'none';
-                        updateStatus('📂 Barra lateral desactivada');
-                    }
-                }
+                updateStatus(checked ? '📂 Barra lateral activada' : '📂 Barra lateral desactivada');
             });
 
             setupToggle('showHomeButton', (checked) => {
@@ -12913,12 +12904,6 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
                             }
                         }
                     });
-                    
-                    // Aplicar estado de barra lateral
-                    const sidebar = document.getElementById('nezaSidebar');
-                    if (sidebar && settings.showSidebar !== undefined) {
-                        sidebar.style.display = settings.showSidebar ? 'flex' : 'none';
-                    }
                     
                     updateStatus('⚙️ Configuraciones cargadas');
                 }
