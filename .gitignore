@@ -1,0 +1,6 @@
+# Build artifacts 
+dist/win-unpacked/ 
+dist/*-win32-x64/ 
+node_modules/ 
+*.log 
+.DS_Store
