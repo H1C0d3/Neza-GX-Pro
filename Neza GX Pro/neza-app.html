@@ -532,6 +532,13 @@
             opacity: 1 !important;
             z-index: 1500 !important;
             position: relative !important;
+            margin-left: 60px !important;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Ajustar navigation-bar cuando la sidebar está oculta */
+        body.sidebar-hidden .navigation-bar {
+            margin-left: 0 !important;
         }
 
         .nav-button {
@@ -2069,6 +2076,13 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
+            margin-left: 60px;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Ajustar content-area cuando la sidebar está oculta */
+        body.sidebar-hidden .content-area {
+            margin-left: 0;
         }
 
         .homepage {
@@ -2362,6 +2376,14 @@
             opacity: 1 !important;
             top: 0 !important;
             left: 0 !important;
+            margin-left: 60px !important;
+            width: calc(100% - 60px) !important;
+            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Ajustar tab-bar cuando la sidebar está oculta */
+        body.sidebar-hidden .tab-bar {
+            margin-left: 0 !important;
             width: 100% !important;
         }
 
@@ -5136,6 +5158,11 @@
 
         .neza-sidebar.expanded {
             width: 240px;
+        }
+
+        /* Ocultar completamente la sidebar */
+        .neza-sidebar.hidden {
+            display: none !important;
         }
 
         /* Sidebar Header - Área fija */
@@ -12801,12 +12828,15 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
             // Configurar todos los toggles
             setupToggle('showSidebar', (checked) => {
                 const sidebar = document.getElementById('nezaSidebar');
+                const body = document.body;
                 if (sidebar) {
                     if (checked) {
-                        sidebar.style.display = 'flex';
+                        sidebar.classList.remove('hidden');
+                        body.classList.remove('sidebar-hidden');
                         updateStatus('📂 Barra lateral activada');
                     } else {
-                        sidebar.style.display = 'none';
+                        sidebar.classList.add('hidden');
+                        body.classList.add('sidebar-hidden');
                         updateStatus('📂 Barra lateral desactivada');
                     }
                 }
@@ -12916,8 +12946,15 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
                     
                     // Aplicar estado de barra lateral
                     const sidebar = document.getElementById('nezaSidebar');
+                    const body = document.body;
                     if (sidebar && settings.showSidebar !== undefined) {
-                        sidebar.style.display = settings.showSidebar ? 'flex' : 'none';
+                        if (settings.showSidebar) {
+                            sidebar.classList.remove('hidden');
+                            body.classList.remove('sidebar-hidden');
+                        } else {
+                            sidebar.classList.add('hidden');
+                            body.classList.add('sidebar-hidden');
+                        }
                     }
                     
                     updateStatus('⚙️ Configuraciones cargadas');

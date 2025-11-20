@@ -224,7 +224,7 @@ function loadWindowState() {
 
 function saveWindowState() {
     try {
-        if (!mainWindow) return;
+        if (!mainWindow || mainWindow.isDestroyed()) return;
         
         const bounds = mainWindow.getBounds();
         const state = {
@@ -239,7 +239,10 @@ function saveWindowState() {
         fs.writeFileSync(statePath, JSON.stringify(state, null, 2));
         log.info('💾 Estado de ventana guardado');
     } catch (error) {
-        log.error('❌ Error guardando estado de ventana:', error);
+        // Ignorar errores de objeto destruido
+        if (!error.message.includes('destroyed')) {
+            log.error('❌ Error guardando estado de ventana:', error);
+        }
     }
 }
 
