@@ -21,7 +21,7 @@ log.info('Iniciando Nexa Browser...');
 let mainWindow;
 let welcomeWindow = null;
 let updateAvailable = false;
-const CURRENT_VERSION = '2.2.0';
+const CURRENT_VERSION = '2.2.1';
 const isDev = !app.isPackaged;
 
 function createWindow() {
