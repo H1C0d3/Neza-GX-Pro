@@ -532,13 +532,6 @@
             opacity: 1 !important;
             z-index: 1500 !important;
             position: relative !important;
-            margin-left: 60px !important;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Ajustar navigation-bar cuando la sidebar está oculta */
-        body.sidebar-hidden .navigation-bar {
-            margin-left: 0 !important;
         }
 
         .nav-button {
@@ -2076,13 +2069,6 @@
             flex-direction: column;
             position: relative;
             overflow: hidden;
-            margin-left: 60px;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Ajustar content-area cuando la sidebar está oculta */
-        body.sidebar-hidden .content-area {
-            margin-left: 0;
         }
 
         .homepage {
@@ -2376,14 +2362,6 @@
             opacity: 1 !important;
             top: 0 !important;
             left: 0 !important;
-            margin-left: 60px !important;
-            width: calc(100% - 60px) !important;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1), width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        /* Ajustar tab-bar cuando la sidebar está oculta */
-        body.sidebar-hidden .tab-bar {
-            margin-left: 0 !important;
             width: 100% !important;
         }
 
@@ -2397,7 +2375,7 @@
             border: none;
             border-radius: 8px 8px 0 0;
             color: #ffffff;
-            cursor: move;
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -2815,6 +2793,42 @@
 
         .tab.stealth-tab:hover::before {
             left: 100%;
+        }
+
+        /* Pestañas fijadas - compactas y fijas a la izquierda */
+        .tab.pinned {
+            min-width: 50px !important;
+            max-width: 50px !important;
+            flex-shrink: 0;
+            border-right: 2px solid rgba(0, 212, 170, 0.3);
+            background: linear-gradient(135deg, rgba(0, 212, 170, 0.15), rgba(0, 150, 136, 0.15));
+        }
+
+        .tab.pinned .tab-title-text {
+            display: none;
+        }
+
+        .tab.pinned .tab-icon {
+            font-size: 20px;
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+        .tab.pinned .tab-icon img {
+            width: 20px !important;
+            height: 20px !important;
+            object-fit: contain;
+        }
+
+        .tab.pinned .tab-close {
+            display: none !important;
+        }
+
+        .tab.pinned .tab-audio-button {
+            right: 5px;
         }
 
         .tab.stealth-tab .tab-title-text {
@@ -5140,143 +5154,90 @@
         }
 
         /* ============ NEZA SIDEBAR (Opera GX Style) ============ */
+        /* ==================== NUEVA SIDEBAR LIMPIA ==================== */
         .neza-sidebar {
             position: fixed;
             left: 0;
             top: 32px;
             width: 60px;
             height: calc(100vh - 32px);
-            background: linear-gradient(180deg, #1a1a1a 0%, #0f0f0f 100%);
-            border-right: 1px solid rgba(0, 212, 170, 0.1);
+            background: linear-gradient(180deg, #1e1e1e 0%, #121212 100%);
+            border-right: 1px solid rgba(0, 212, 170, 0.15);
             display: flex;
             flex-direction: column;
-            align-items: center;
             z-index: 9000;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             overflow: hidden;
-            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.3);
         }
 
+        /* Sidebar expandida */
         .neza-sidebar.expanded {
             width: 240px;
         }
 
-        /* Ocultar completamente la sidebar */
+        /* Sidebar oculta completamente */
         .neza-sidebar.hidden {
-            display: none !important;
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
         }
 
-        /* Sidebar Header - Área fija */
+        /* === NUEVA SIDEBAR - CSS Limpio === */
         .sidebar-header {
-            width: 100%;
-            flex-shrink: 0;
-            background: linear-gradient(180deg, #1a1a1a 0%, #141414 100%);
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(0, 212, 170, 0.1);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        /* Sidebar Logo */
-        .sidebar-logo-container {
-            width: 100%;
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            padding: 12px 0;
-            margin-bottom: 8px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .sidebar-logo-container:hover {
-            background: rgba(0, 212, 170, 0.05);
+            padding: 16px 0;
+            gap: 12px;
+            border-bottom: 1px solid rgba(0, 212, 170, 0.1);
         }
 
         .sidebar-logo {
-            width: 40px;
-            height: 40px;
-            object-fit: contain;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: drop-shadow(0 2px 8px rgba(0, 212, 170, 0.3));
-            animation: logoPulse 4s ease-in-out infinite;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% {
-                filter: drop-shadow(0 2px 8px rgba(0, 212, 170, 0.3));
-            }
-            50% {
-                filter: drop-shadow(0 2px 12px rgba(0, 212, 170, 0.5));
-            }
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
         .sidebar-logo:hover {
-            transform: scale(1.15) rotate(5deg);
-            filter: drop-shadow(0 4px 16px rgba(0, 212, 170, 0.6));
-            animation: none;
-        }
-
-        .neza-sidebar.expanded .sidebar-logo {
-            width: 50px;
-            height: 50px;
-        }
-
-        .neza-sidebar.expanded .sidebar-logo:hover {
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.1);
         }
 
         .sidebar-toggle {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 212, 170, 0.1);
+            border: none;
+            border-radius: 6px;
+            color: var(--neza-primary);
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: transparent;
-            border: none;
-            color: #888;
-            font-size: 20px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.2s ease;
-            position: relative;
         }
 
         .sidebar-toggle:hover {
-            background: rgba(0, 212, 170, 0.1);
-            color: var(--neza-primary);
+            background: rgba(0, 212, 170, 0.2);
+            transform: scale(1.05);
         }
 
-        /* Sidebar Content - Área con scroll */
         .sidebar-content {
             flex: 1;
-            width: 100%;
             overflow-y: auto;
             overflow-x: hidden;
-            padding: 12px 0;
+            padding: 8px;
         }
 
         .sidebar-content::-webkit-scrollbar {
             width: 4px;
         }
 
-        .sidebar-content::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
         .sidebar-content::-webkit-scrollbar-thumb {
-            background: rgba(0, 212, 170, 0.2);
+            background: rgba(0, 212, 170, 0.3);
             border-radius: 2px;
-        }
-
-        .sidebar-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 212, 170, 0.4);
-        }
-
-        .sidebar-section {
-            width: 100%;
-            margin-bottom: 4px;
         }
 
         .sidebar-section-title {
@@ -5285,130 +5246,87 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             padding: 8px 12px;
-            display: none;
-            font-weight: 600;
-        }
-
-        .neza-sidebar.expanded .sidebar-section-title {
-            display: block;
-        }
-
-        .sidebar-divider {
-            width: 40px;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.1);
-            margin: 8px 0;
-        }
-
-        .neza-sidebar.expanded .sidebar-divider {
-            width: calc(100% - 20px);
-            margin: 8px 10px;
-        }
-
-        .sidebar-item {
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 12px;
-            background: transparent;
-            border: none;
-            color: #ffffff;
-            font-size: 18px;
-            cursor: pointer;
-            border-radius: 8px;
-            margin: 2px auto;
-            padding: 0;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-            text-decoration: none;
-        }
-
-        .neza-sidebar.expanded .sidebar-item {
-            width: calc(100% - 16px);
-            padding: 0 12px;
-            justify-content: flex-start;
-        }
-
-        .sidebar-item-icon {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .sidebar-item-text {
-            font-size: 13px;
-            font-weight: 500;
-            white-space: nowrap;
             opacity: 0;
             display: none;
         }
 
-        .neza-sidebar.expanded .sidebar-item-text {
+        .neza-sidebar.expanded .sidebar-section-title {
             opacity: 1;
             display: block;
+        }
+
+        .sidebar-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 4px auto;
+            background: transparent;
+            border: none;
+            border-radius: 8px;
+            color: #ccc;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .neza-sidebar.expanded .sidebar-item {
+            width: calc(100% - 8px);
+            justify-content: flex-start;
+            padding-left: 12px;
+        }
+
+        .sidebar-item-text {
+            font-size: 13px;
+            white-space: nowrap;
+            opacity: 0;
+            width: 0;
+            overflow: hidden;
+        }
+
+        .neza-sidebar.expanded .sidebar-item-text {
+            opacity: 1;
+            width: auto;
         }
 
         .sidebar-item:hover {
             background: rgba(0, 212, 170, 0.15);
             color: var(--neza-primary);
-            transform: translateX(2px);
         }
 
-        .sidebar-item.active {
-            background: rgba(0, 212, 170, 0.2);
-            color: var(--neza-primary);
-            font-weight: 600;
+        .sidebar-divider {
+            width: 32px;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+            margin: 8px auto;
         }
 
-        .sidebar-item.active::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 3px;
-            height: 24px;
-            background: var(--neza-primary);
-            border-radius: 0 2px 2px 0;
-        }
-
-        .sidebar-badge {
-            position: absolute;
-            top: 6px;
-            right: 6px;
-            background: #ff3742;
-            color: white;
-            font-size: 9px;
-            font-weight: 700;
-            padding: 2px 5px;
-            border-radius: 10px;
-            min-width: 16px;
-            text-align: center;
-        }
-
-        .neza-sidebar.expanded .sidebar-badge {
-            right: 12px;
+        .neza-sidebar.expanded .sidebar-divider {
+            width: calc(100% - 16px);
         }
 
         .sidebar-spacer {
             flex: 1;
         }
 
-        /* Ajustar contenido principal para dejar espacio a la sidebar */
-        body {
+        /* Ajustar body según estado de sidebar */
+        body:not(.sidebar-hidden) {
             margin-left: 60px;
-            transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         body.sidebar-expanded {
             margin-left: 240px;
+        }
+
+        body.sidebar-hidden {
+            margin-left: 0;
+        }
+
+        body {
+            transition: margin-left 0.3s ease;
         }
 
         /* Messenger Panel */
@@ -5578,128 +5496,80 @@
             </div>
         </div>
 
-        <!-- Neza Sidebar (Opera GX Style) -->
+        <!-- NUEVA SIDEBAR -->
         <div class="neza-sidebar" id="nezaSidebar">
-            <!-- Sidebar Header (Fija) -->
             <div class="sidebar-header">
-                <!-- Sidebar Logo -->
-                <div class="sidebar-logo-container" onclick="goToHome()" title="Neza GX Pro - Ir a inicio">
-                    <img src="resourse/Neza_GX_Pro_Icono_PNG.png" alt="Neza GX Pro" class="sidebar-logo">
-                </div>
-
-                <!-- Toggle Button -->
-                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Expandir/Contraer">
-                    <span class="sidebar-item-icon">☰</span>
-                </button>
+                <img src="resourse/Neza_GX_Pro_Icono_PNG.png" alt="Neza" class="sidebar-logo" onclick="goToHome()" title="Inicio">
+                <button class="sidebar-toggle" onclick="toggleSidebar()" title="Expandir/Contraer">☰</button>
             </div>
 
-            <!-- Sidebar Content (Con scroll) -->
             <div class="sidebar-content">
-                <div class="sidebar-divider"></div>
-
-                <!-- Main Section -->
-            <div class="sidebar-section">
                 <div class="sidebar-section-title">Principal</div>
-                
-                <button class="sidebar-item active" onclick="goToHome()" title="Inicio">
-                    <span class="sidebar-item-icon">🏠</span>
+                <button class="sidebar-item" onclick="goToHome()" title="Inicio">
+                    <span>🏠</span>
                     <span class="sidebar-item-text">Inicio</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openBookmarks()" title="Favoritos">
-                    <span class="sidebar-item-icon">⭐</span>
+                    <span>⭐</span>
                     <span class="sidebar-item-text">Favoritos</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openHistory()" title="Historial">
-                    <span class="sidebar-item-icon">🕐</span>
+                    <span>🕐</span>
                     <span class="sidebar-item-text">Historial</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openDownloads()" title="Descargas">
-                    <span class="sidebar-item-icon">📥</span>
+                    <span>📥</span>
                     <span class="sidebar-item-text">Descargas</span>
                 </button>
-            </div>
 
-            <div class="sidebar-divider"></div>
+                <div class="sidebar-divider"></div>
 
-            <!-- Apps Section -->
-            <div class="sidebar-section">
                 <div class="sidebar-section-title">Apps</div>
-                
-                <button class="sidebar-item" onclick="openApp('whatsapp')" title="WhatsApp Web">
-                    <span class="sidebar-item-icon">💬</span>
+                <button class="sidebar-item" onclick="openApp('whatsapp')" title="WhatsApp">
+                    <span>💬</span>
                     <span class="sidebar-item-text">WhatsApp</span>
-                    <span class="sidebar-badge" style="display: none;">5</span>
                 </button>
-
-                <button class="sidebar-item" onclick="toggleMessengerPanel()" title="Messenger">
-                    <span class="sidebar-item-icon">📨</span>
-                    <span class="sidebar-item-text">Messenger</span>
-                </button>
-
                 <button class="sidebar-item" onclick="openApp('instagram')" title="Instagram">
-                    <span class="sidebar-item-icon">📷</span>
+                    <span>📷</span>
                     <span class="sidebar-item-text">Instagram</span>
                 </button>
-
-                <button class="sidebar-item" onclick="openApp('twitter')" title="Twitter / X">
-                    <span class="sidebar-item-icon">🐦</span>
+                <button class="sidebar-item" onclick="openApp('twitter')" title="Twitter">
+                    <span>🐦</span>
                     <span class="sidebar-item-text">Twitter</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openApp('discord')" title="Discord">
-                    <span class="sidebar-item-icon">💬</span>
+                    <span>💬</span>
                     <span class="sidebar-item-text">Discord</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openApp('twitch')" title="Twitch">
-                    <span class="sidebar-item-icon">🎮</span>
+                    <span>🎮</span>
                     <span class="sidebar-item-text">Twitch</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openApp('spotify')" title="Spotify">
-                    <span class="sidebar-item-icon">🎵</span>
+                    <span>🎵</span>
                     <span class="sidebar-item-text">Spotify</span>
                 </button>
-            </div>
 
-            <div class="sidebar-divider"></div>
+                <div class="sidebar-divider"></div>
 
-            <!-- Gaming Section -->
-            <div class="sidebar-section">
                 <div class="sidebar-section-title">Gaming</div>
-                
                 <button class="sidebar-item" onclick="openApp('steam')" title="Steam">
-                    <span class="sidebar-item-icon">🎮</span>
+                    <span>🎮</span>
                     <span class="sidebar-item-text">Steam</span>
                 </button>
-
                 <button class="sidebar-item" onclick="openApp('epicgames')" title="Epic Games">
-                    <span class="sidebar-item-icon">🎯</span>
+                    <span>🎯</span>
                     <span class="sidebar-item-text">Epic Games</span>
                 </button>
+
+                <div class="sidebar-spacer"></div>
+
+                <button class="sidebar-item" onclick="showMenu()" title="Ajustes">
+                    <span>⚙️</span>
+                    <span class="sidebar-item-text">Ajustes</span>
+                </button>
             </div>
-
-            <div class="sidebar-spacer"></div>
-
-                <!-- Bottom Section -->
-                <div class="sidebar-section">
-                    <button class="sidebar-item" onclick="toggleMusicPanel()" title="Control de Música">
-                        <span class="sidebar-item-icon">🎵</span>
-                        <span class="sidebar-item-text">Música</span>
-                    </button>
-
-                    <button class="sidebar-item" onclick="showMenu()" title="Configuración">
-                        <span class="sidebar-item-icon">⚙️</span>
-                        <span class="sidebar-item-text">Ajustes</span>
-                    </button>
-                </div>
-            </div>
-            <!-- Fin de sidebar-content -->
         </div>
-        <!-- Fin de neza-sidebar -->
 
         <!-- Messenger Panel -->
         <div class="messenger-panel" id="messengerPanel">
@@ -5892,7 +5762,7 @@
             <div class="tab-context-menu-separator"></div>
             <div class="tab-context-menu-item" onclick="contextPinTab()">
                 <span class="tab-context-menu-item-icon">📌</span>
-                <span>Fijar pestaña</span>
+                <span id="contextPinText">Fijar pestaña</span>
             </div>
             <div class="tab-context-menu-item" onclick="contextMuteTab()">
                 <span class="tab-context-menu-item-icon">🔇</span>
@@ -6989,28 +6859,59 @@
             // ✅ AGREGAR EVENT LISTENERS CORRECTOS PARA TECLADO
             const addressInput = document.getElementById('addressInput');
             if (addressInput) {
+                // Ocultar about:blank visualmente pero mantener funcionalidad normal
+                const observer = new MutationObserver(() => {
+                    if (addressInput.value === 'about:blank' && document.activeElement !== addressInput) {
+                        addressInput.value = '';
+                    }
+                });
+                
+                // Limpiar about:blank cuando se enfoca
+                addressInput.addEventListener('focus', function() {
+                    if (addressInput.value === 'about:blank' || addressInput.value === '') {
+                        addressInput.value = '';
+                        addressInput.placeholder = 'Busca o navega a un sitio web...';
+                    } else {
+                        // Seleccionar todo si tiene contenido válido
+                        addressInput.select();
+                    }
+                });
+                
+                // Cuando pierde el focus, actualizar con la URL actual
+                addressInput.addEventListener('blur', function() {
+                    const activeTab = tabs.find(t => t.id === activeTabId);
+                    if (activeTab && activeTab.url && activeTab.url !== 'about:blank') {
+                        addressInput.value = getDomainFromUrl(activeTab.url);
+                    } else if (!addressInput.value || addressInput.value === 'about:blank') {
+                        addressInput.value = '';
+                    }
+                });
+                
                 addressInput.addEventListener('keydown', function(event) {
                     if (event.key === 'Enter') {
                         console.log('🔍 ENTER en barra TRADICIONAL detectado!');
-                        const query = addressInput.value.trim();
-                        if (query) {
-                            console.log('🌐 Query obtenida:', query);
-                            
-                            // Mejorar detección: si es una palabra simple como "youtube", buscar
-                            let finalUrl;
-                            if (query.includes('.') || query.startsWith('http')) {
-                                // Es una URL
-                                finalUrl = query.startsWith('http') ? query : 'https://' + query;
-                            } else {
-                                // Es una búsqueda - ir a Google
-                                finalUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                            }
-                            
-                            console.log('📍 URL final:', finalUrl);
-                            navigate(finalUrl);
-                        } else {
-                            console.log('❌ Query vacía en addressInput');
+                        let query = addressInput.value.trim();
+                        
+                        // Limpiar about:blank si está presente
+                        if (query === 'about:blank' || query === '') {
+                            console.log('❌ Query vacía o about:blank');
+                            return;
                         }
+                        
+                        console.log('🌐 Query obtenida:', query);
+                        
+                        // Mejorar detección: si es una palabra simple como "youtube", buscar
+                        let finalUrl;
+                        if (query.includes('.') || query.startsWith('http')) {
+                            // Es una URL
+                            finalUrl = query.startsWith('http') ? query : 'https://' + query;
+                        } else {
+                            // Es una búsqueda - ir a Google
+                            finalUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                        }
+                        
+                        console.log('📍 URL final:', finalUrl);
+                        navigate(finalUrl);
                     }
                 });
                 console.log('✅ Event listener añadido a addressInput');
@@ -7476,8 +7377,13 @@
                 activeTab.webview.setAttribute('src', url);
             }
             
-            // Mostrar solo el dominio en lugar de la URL completa
-            document.getElementById('addressInput').value = getDomainFromUrl(url);
+            // Mostrar solo el dominio en lugar de la URL completa (pero nunca about:blank)
+            // SOLO actualizar si el usuario NO está escribiendo (no tiene el focus)
+            const addressInputElement = document.getElementById('addressInput');
+            if (document.activeElement !== addressInputElement) {
+                const displayUrl = (url === 'about:blank') ? '' : getDomainFromUrl(url);
+                addressInputElement.value = displayUrl;
+            }
             
             updateStatus(`Navegando a ${url}`);
             updateNavigationButtons();
@@ -7678,7 +7584,8 @@
                 hasAudio: false,
                 isMuted: false,
                 isPrivate: isPrivateMode,
-                privacyLayer: isPrivateMode ? currentPrivacyLayer : 0
+                privacyLayer: isPrivateMode ? currentPrivacyLayer : 0,
+                favicon: null
             };
             
             console.log('✅ Nueva pestaña creada con ID:', newTabObj.id);
@@ -7715,7 +7622,7 @@
             console.log('✅ newTab() COMPLETADA');
         }
 
-        function closeTab(tabId) {
+        function closeTab(tabId, forceClose = false) {
             if (tabs.length === 1) {
                 closeApp();
                 return;
@@ -7723,6 +7630,11 @@
             
             const tabIndex = tabs.findIndex(tab => tab.id === tabId);
             if (tabIndex !== -1) {
+                // Prevenir cierre de pestañas fijadas (excepto si es forzado)
+                if (tabs[tabIndex].isPinned && !forceClose) {
+                    updateStatus('⚠️ Las pestañas fijadas no se pueden cerrar. Desfíjalas primero.');
+                    return;
+                }
                 const tabToClose = tabs[tabIndex];
                 
                 // Limpiar el webview de la pestaña que se cierra
@@ -7799,7 +7711,12 @@
                     container.style.visibility = 'visible';
                     container.style.pointerEvents = 'auto';
                     
-                    document.getElementById('addressInput').value = getDomainFromUrl(tab.url);
+                    // No mostrar about:blank en la barra - SOLO actualizar si el usuario NO está escribiendo
+                    const addressInputElement = document.getElementById('addressInput');
+                    if (document.activeElement !== addressInputElement) {
+                        const urlToShow = (tab.url === 'about:blank' || !tab.url) ? '' : getDomainFromUrl(tab.url);
+                        addressInputElement.value = urlToShow;
+                    }
                     isHomePage = false;
                     currentUrl = tab.url;
                     
@@ -7888,10 +7805,17 @@
 
         function renderTabs() {
             const tabBar = document.getElementById('tabBar');
-            const tabsHtml = tabs.map(tab => {
+            
+            // Ordenar pestañas: fijadas primero, luego el resto
+            const pinnedTabs = tabs.filter(t => t.isPinned);
+            const unpinnedTabs = tabs.filter(t => !t.isPinned);
+            const sortedTabs = [...pinnedTabs, ...unpinnedTabs];
+            
+            const tabsHtml = sortedTabs.map(tab => {
                 // Determinar clases CSS basadas en el estado de audio y modo privado
                 let tabClasses = 'tab';
                 if (tab.isActive) tabClasses += ' active';
+                if (tab.isPinned) tabClasses += ' pinned';
                 if (tab.hasAudio) tabClasses += ' has-audio';
                 if (tab.isMuted) tabClasses += ' audio-muted';
                 if (tab.isStealthMode || tab.isPrivate) tabClasses += ' stealth-tab';
@@ -7925,7 +7849,16 @@
                 // Título e icono especial para pestañas privadas
                 let tabTitle = tab.title;
                 let tabIcon = '';
-                if (tab.isPrivate && isPrivateMode) {
+                
+                if (tab.isPinned) {
+                    // Para pestañas fijadas: SOLO mostrar favicon, sin emoji de respaldo
+                    if (tab.favicon) {
+                        tabIcon = `<img src="${tab.favicon}" style="width: 20px; height: 20px; object-fit: contain;">`;
+                    } else {
+                        tabIcon = ''; // Sin ícono si no hay favicon
+                    }
+                    tabTitle = `${tab.title} (Fijada)`;
+                } else if (tab.isPrivate && isPrivateMode) {
                     tabIcon = '🕶️ ';
                     tabTitle = `${tab.title} - Modo Privado ${getLayerName(tab.privacyLayer || currentPrivacyLayer)}`;
                 } else if (tab.isStealthMode) {
@@ -8060,6 +7993,14 @@
             
             if (!tab) return;
             
+            // Actualizar texto de fijar
+            const pinText = document.getElementById('contextPinText');
+            if (tab.isPinned) {
+                pinText.textContent = 'Desfijar pestaña';
+            } else {
+                pinText.textContent = 'Fijar pestaña';
+            }
+            
             // Actualizar texto de silenciar
             const muteText = document.getElementById('contextMuteText');
             if (tab.isMuted) {
@@ -8118,7 +8059,9 @@
                     isPrivate: tab.isPrivate,
                     isStealthMode: tab.isStealthMode,
                     stealthLayer: tab.stealthLayer,
-                    privacyLayer: tab.privacyLayer
+                    privacyLayer: tab.privacyLayer,
+                    favicon: tab.favicon,
+                    isPinned: false
                 };
                 
                 // Insertar después de la pestaña original
@@ -8146,7 +8089,7 @@
             if (tab) {
                 tab.isPinned = !tab.isPinned;
                 renderTabs();
-                updateStatus(tab.isPinned ? 'Pestaña fijada' : 'Pestaña desfijada');
+                updateStatus(tab.isPinned ? '📌 Pestaña fijada - No se puede cerrar con X' : '📌 Pestaña desfijada');
             }
         }
 
@@ -8157,7 +8100,12 @@
 
         function contextCloseTab() {
             hideTabContextMenu();
-            closeTab(contextMenuTabId);
+            const tab = tabs.find(t => t.id === contextMenuTabId);
+            if (tab && tab.isPinned) {
+                // Si está fijada, primero desfijar y luego cerrar
+                tab.isPinned = false;
+            }
+            closeTab(contextMenuTabId, true);
         }
 
         function contextCloseOtherTabs() {
@@ -8296,10 +8244,15 @@
         }
 
         function getDomainFromUrl(url) {
+            // Nunca retornar about:blank pero permitir URLs normales
+            if (!url || url === 'about:blank' || url === '') return '';
+            
             try {
-                return new URL(url).hostname || url;
+                const hostname = new URL(url).hostname;
+                return hostname || url;
             } catch {
-                return url.substring(0, 30) + (url.length > 30 ? '...' : '');
+                // Si no es una URL válida, retornar el texto original (para búsquedas)
+                return url.substring(0, 50) + (url.length > 50 ? '...' : '');
             }
         }
 
@@ -8369,8 +8322,101 @@
             return webview;
         }
 
+        // Función para inyectar el script de middle-click en un webview
+        function injectMiddleClickScript(webview) {
+            if (!webview) return;
+            
+            try {
+                webview.executeJavaScript(`
+                    (function() {
+                        // Evitar inyección múltiple
+                        if (window.__middleClickInjected) return;
+                        window.__middleClickInjected = true;
+                        
+                        // Función para encontrar URL en el elemento o sus padres
+                        function findUrl(element) {
+                            let current = element;
+                            let attempts = 0;
+                            
+                            while (current && current !== document.body && attempts < 10) {
+                                // Verificar si es un enlace directo
+                                if (current.tagName === 'A' && current.href) {
+                                    return current.href;
+                                }
+                                
+                                // YouTube: buscar en atributos href de padres
+                                if (current.href) {
+                                    return current.href;
+                                }
+                                
+                                // Buscar en atributo data-href o data-url
+                                if (current.dataset && (current.dataset.href || current.dataset.url)) {
+                                    return current.dataset.href || current.dataset.url;
+                                }
+                                
+                                // YouTube específico: buscar ytd-thumbnail o ytd-video-renderer
+                                if (current.tagName === 'YTD-THUMBNAIL' || current.tagName === 'YTD-VIDEO-RENDERER') {
+                                    const link = current.querySelector('a#thumbnail, a.ytd-thumbnail');
+                                    if (link && link.href) {
+                                        return link.href;
+                                    }
+                                }
+                                
+                                // Buscar enlace dentro del elemento
+                                const innerLink = current.querySelector('a[href]');
+                                if (innerLink && innerLink.href) {
+                                    return innerLink.href;
+                                }
+                                
+                                current = current.parentElement;
+                                attempts++;
+                            }
+                            
+                            return null;
+                        }
+                        
+                        // Capturar auxclick (botón central)
+                        document.addEventListener('auxclick', (e) => {
+                            if (e.button === 1) { // Botón central del mouse
+                                const url = findUrl(e.target);
+                                if (url && url.startsWith('http')) {
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    console.log('🖱️ Middle-Click-URL:', url);
+                                }
+                            }
+                        }, true);
+                        
+                        // También capturar mousedown para mayor compatibilidad
+                        document.addEventListener('mousedown', (e) => {
+                            if (e.button === 1) { // Botón central
+                                const url = findUrl(e.target);
+                                if (url && url.startsWith('http')) {
+                                    e.preventDefault();
+                                    console.log('🖱️ Middle-Click-URL:', url);
+                                }
+                            }
+                        }, true);
+                    })();
+                `);
+            } catch (error) {
+                console.error('Error inyectando script middle-click:', error);
+            }
+        }
+
         // Configurar eventos específicos para cada webview
         function setupWebviewEvents(webview, tabId) {
+            // Listener usando console-message para capturar middle-click
+            webview.addEventListener('console-message', (e) => {
+                if (e.message.includes('🖱️ Middle-Click-URL:')) {
+                    const url = e.message.split('🖱️ Middle-Click-URL: ')[1];
+                    if (url && url.startsWith('http')) {
+                        console.log('📌 Click central detectado, abriendo:', url);
+                        newTab(url);
+                    }
+                }
+            });
+            
             webview.addEventListener('dom-ready', () => {
                 if (activeTabId === tabId) {
                     hideLoading();
@@ -8378,6 +8424,9 @@
                     updateNavigationButtons();
                 }
                 console.log(`✅ Webview ${tabId} DOM ready`);
+                
+                // Inyectar script para capturar click central del mouse
+                injectMiddleClickScript(webview);
             });
             
             webview.addEventListener('did-start-loading', () => {
@@ -8394,6 +8443,11 @@
                     updateStatus('Página cargada');
                 }
                 console.log(`✅ Webview ${tabId} carga completada`);
+                
+                // Re-inyectar script después de cargar (para sitios con contenido dinámico)
+                setTimeout(() => {
+                    injectMiddleClickScript(webview);
+                }, 500);
             });
             
             // Timeout de emergencia para detectar páginas que no cargan
@@ -8451,7 +8505,16 @@
                     if (activeTabId === tabId) {
                         currentUrl = newUrl;
                         const domain = getDomainFromUrl(newUrl);
-                        document.getElementById('addressInput').value = domain;
+                        // SOLO actualizar si el usuario NO está escribiendo
+                        const addressInputElement = document.getElementById('addressInput');
+                        if (document.activeElement !== addressInputElement) {
+                            // No mostrar about:blank en la barra
+                            if (newUrl !== 'about:blank' && domain !== 'about:blank') {
+                                addressInputElement.value = domain;
+                            } else {
+                                addressInputElement.value = '';
+                            }
+                        }
                         updateNavigationButtons();
                         updateStatus(`Navegando: ${domain}`);
                     }
@@ -8476,7 +8539,16 @@
                     if (activeTabId === tabId) {
                         currentUrl = newUrl;
                         const domain = getDomainFromUrl(newUrl);
-                        document.getElementById('addressInput').value = domain;
+                        // SOLO actualizar si el usuario NO está escribiendo
+                        const addressInputElement = document.getElementById('addressInput');
+                        if (document.activeElement !== addressInputElement) {
+                            // No mostrar about:blank en la barra
+                            if (newUrl !== 'about:blank' && domain !== 'about:blank') {
+                                addressInputElement.value = domain;
+                            } else {
+                                addressInputElement.value = '';
+                            }
+                        }
                         updateNavigationButtons();
                     }
                 }
@@ -8492,6 +8564,17 @@
                     renderTabs();
                 }
                 console.log(`📝 Webview ${tabId} título actualizado:`, title);
+            });
+            
+            // Capturar favicon cuando cambie
+            webview.addEventListener('page-favicon-updated', (event) => {
+                const favicons = event.favicons;
+                const tab = tabs.find(t => t.id === tabId);
+                if (tab && favicons && favicons.length > 0) {
+                    tab.favicon = favicons[0]; // Usar el primer favicon disponible
+                    renderTabs();
+                    console.log(`🎨 Webview ${tabId} favicon actualizado:`, favicons[0]);
+                }
             });
         }
 
@@ -8824,9 +8907,7 @@
             sidebar.classList.toggle('expanded');
             body.classList.toggle('sidebar-expanded');
             
-            // Guardar preferencia
-            const isExpanded = sidebar.classList.contains('expanded');
-            localStorage.setItem('nezaSidebarExpanded', isExpanded);
+            localStorage.setItem('nezaSidebarExpanded', sidebar.classList.contains('expanded'));
         }
 
         function goToHome() {
@@ -12829,16 +12910,21 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
             setupToggle('showSidebar', (checked) => {
                 const sidebar = document.getElementById('nezaSidebar');
                 const body = document.body;
+                console.log('🔍 Toggle sidebar - Checked:', checked, 'Sidebar encontrado:', !!sidebar);
                 if (sidebar) {
                     if (checked) {
                         sidebar.classList.remove('hidden');
                         body.classList.remove('sidebar-hidden');
+                        console.log('✅ Sidebar mostrada - Classes:', sidebar.className);
                         updateStatus('📂 Barra lateral activada');
                     } else {
                         sidebar.classList.add('hidden');
                         body.classList.add('sidebar-hidden');
+                        console.log('❌ Sidebar ocultada - Classes:', sidebar.className);
                         updateStatus('📂 Barra lateral desactivada');
                     }
+                } else {
+                    console.error('❌ ERROR: No se encontró elemento con id="nezaSidebar"');
                 }
             });
 
@@ -12947,14 +13033,19 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
                     // Aplicar estado de barra lateral
                     const sidebar = document.getElementById('nezaSidebar');
                     const body = document.body;
+                    console.log('🔍 Cargando config sidebar - Sidebar encontrado:', !!sidebar, 'showSidebar:', settings.showSidebar);
                     if (sidebar && settings.showSidebar !== undefined) {
                         if (settings.showSidebar) {
                             sidebar.classList.remove('hidden');
                             body.classList.remove('sidebar-hidden');
+                            console.log('✅ Config: Sidebar mostrada - Classes:', sidebar.className);
                         } else {
                             sidebar.classList.add('hidden');
                             body.classList.add('sidebar-hidden');
+                            console.log('❌ Config: Sidebar ocultada - Classes:', sidebar.className);
                         }
+                    } else {
+                        console.error('❌ ERROR Config: Sidebar no encontrado o showSidebar indefinido');
                     }
                     
                     updateStatus('⚙️ Configuraciones cargadas');

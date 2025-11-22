@@ -1,39 +1,18 @@
-# Dependencies
-node_modules/
-
-# Build outputs
-build-output/
-dist/win-unpacked/
+# Build artifacts 
+dist/win-unpacked/ 
+dist/*-win32-x64/
+dist/*.exe
 dist/*.blockmap
-dist/builder-*.yml
-dist/builder-*.yaml
-build/
+node_modules/ 
+*.log 
+.DS_Store
 
-# Installers antiguos (mantener solo latest en dist/)
-installer/
-
-# Portable versions
-Nexa-Browser-Portable/
-Nexa-Browser-Portable.zip
-
-# User data
-user-data/
-
-# Logs and cache
-*.log
-*.cache
-*.tmp
+# Electron cache (archivos muy grandes)
 ${env.LOCALAPPDATA}/
-
-# Scripts de conversión temporales
-convert-*.ps1
-convert-*.bat
-convert-*.js
-package-build-backup.json
-
-# VS Code
 .vscode/
-
-# Debug
+installer/
 debug.md
-dist/*.exe 
+convert-images.ps1
+
+# Archivos duplicados
+Neza GX Pro/

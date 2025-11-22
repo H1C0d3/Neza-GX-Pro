@@ -1,0 +1,46 @@
+directories:
+  output: dist
+  buildResources: resourse
+appId: com.hicode.nezagxpro
+productName: Neza GX Pro
+copyright: Copyright © 2024 Hi Code Studio Tech & GEISA
+compression: maximum
+electronDownload:
+  cache: ${env.LOCALAPPDATA}/electron-cache
+forceCodeSigning: false
+files:
+  - filter:
+      - main.js
+      - preload.js
+      - neza-app.html
+      - pages/**/*
+      - resourse/**/*
+win:
+  target:
+    - target: nsis
+      arch:
+        - x64
+  icon: resourse/icon.ico
+  artifactName: Neza-GX-Pro-Setup-${version}.${ext}
+nsis:
+  oneClick: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: Neza GX Pro
+  installerIcon: resourse/icon.ico
+  uninstallerIcon: resourse/icon.ico
+  installerHeader: resourse/installer-header.bmp
+  installerSidebar: resourse/installer-sidebar.bmp
+  uninstallerSidebar: resourse/installer-sidebar.bmp
+  license: LICENSE.txt
+  perMachine: false
+  allowElevation: true
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false
+  menuCategory: false
+  displayLanguageSelector: false
+  warningsAsErrors: false
+  packElevateHelper: false
+  language: '2058'
+electronVersion: 28.3.3
