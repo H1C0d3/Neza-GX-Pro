@@ -43,4 +43,4 @@ nsis:
   warningsAsErrors: false
   packElevateHelper: false
   language: '2058'
-electronVersion: 28.3.3
+electronVersion: 28.0.0
