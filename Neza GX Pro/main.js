@@ -419,7 +419,8 @@ function showInstallDialog(info) {
     });
 
     if (response === 0) {
-        autoUpdater.quitAndInstall();
+        // Instalar SIN modo silencioso para evitar errores
+        autoUpdater.quitAndInstall(false, true);
     }
 }
 
@@ -445,7 +446,8 @@ ipcMain.handle('download-update', async () => {
 });
 
 ipcMain.handle('install-update', async () => {
-    autoUpdater.quitAndInstall();
+    // Instalar SIN modo silencioso para evitar errores
+    autoUpdater.quitAndInstall(false, true);
 });
 
 ipcMain.handle('get-app-version', async () => {

@@ -5784,6 +5784,77 @@
         .update-btn-primary:active {
             transform: translateY(0);
         }
+
+        /* RESPONSIVE - Pantallas pequeñas */
+        @media screen and (max-height: 700px) {
+            .update-modal {
+                max-height: 95vh;
+            }
+            
+            .update-modal-content {
+                padding: 20px 16px;
+            }
+            
+            .update-celebration-icon {
+                font-size: 40px !important;
+                margin-bottom: 12px !important;
+            }
+            
+            .update-modal-main-title {
+                font-size: 22px !important;
+            }
+            
+            .update-versions-container {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            
+            .update-version-box {
+                padding: 12px !important;
+            }
+        }
+
+        @media screen and (max-width: 600px) {
+            .update-modal {
+                width: 95%;
+                max-width: none;
+            }
+            
+            .update-modal-header {
+                padding: 16px 20px;
+            }
+            
+            .update-modal-footer {
+                flex-direction: column;
+            }
+            
+            .update-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Scroll más visible */
+        .update-modal-content::-webkit-scrollbar {
+            width: 10px !important;
+        }
+
+        .update-modal-content::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            margin: 4px;
+        }
+
+        .update-modal-content::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #00D4AA 0%, #1BCED6 100%);
+            border-radius: 10px;
+            border: 2px solid rgba(0, 0, 0, 0.2);
+        }
+
+        .update-modal-content::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #00FFCC 0%, #1BE5FF 100%);
+            box-shadow: 0 0 10px rgba(0, 212, 170, 0.5);
+        }
     </style>
 </head>
 <body>
