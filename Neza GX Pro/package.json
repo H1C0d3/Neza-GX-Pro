@@ -55,7 +55,6 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
-      "allowElevation": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Neza GX Pro",
@@ -66,23 +65,14 @@
       "uninstallerSidebar": "resourse/installer-sidebar.bmp",
       "license": "LICENSE.txt",
       "perMachine": false,
+      "allowElevation": true,
       "runAfterFinish": true,
       "deleteAppDataOnUninstall": false,
       "menuCategory": false,
       "displayLanguageSelector": false,
-      "language": "2058",
-      "installerLanguages": ["es"],
-      "include": "build/installer.nsh",
       "warningsAsErrors": false,
-      "packElevateHelper": true,
-      "removeDefaultUninstallWelcomePage": false,
-      "differentialPackage": true
-    },
-    "publish": {
-      "provider": "github",
-      "owner": "H1C0d3",
-      "repo": "Neza-GX-Pro",
-      "releaseType": "release"
+      "packElevateHelper": false,
+      "language": "2058"
     }
   }
 }
