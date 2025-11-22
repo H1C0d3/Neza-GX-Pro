@@ -1,6 +1,23 @@
 # Build artifacts 
 dist/win-unpacked/ 
-dist/*-win32-x64/ 
+dist/*-win32-x64/
+dist/*.exe
+dist/*.blockmap
+dist/builder-*.yml
+dist/builder-*.yaml
 node_modules/ 
 *.log 
 .DS_Store
+
+# Archivos de desarrollo innecesarios
+${env.LOCALAPPDATA}/
+.vscode/
+installer/
+debug.md
+convert-images.ps1
+release-notes.md
+package-build.json
+Logo/
+
+# Archivos duplicados
+Neza GX Pro/

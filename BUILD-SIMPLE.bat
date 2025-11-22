@@ -98,8 +98,8 @@ if %ERRORLEVEL% EQU 0 (
     echo %~dp0dist\
     echo.
     
-    if exist "%~dp0dist\Neza-GX-Pro-Setup-2.1.0.exe" (
-        echo [OK] Neza-GX-Pro-Setup-2.1.0.exe
+    if exist "%~dp0dist\Neza-GX-Pro-Setup-2.2.0.exe" (
+        echo [OK] Neza-GX-Pro-Setup-2.2.0.exe
         start explorer "%~dp0dist"
     ) else (
         echo [ADVERTENCIA] No se encontro el Setup.exe

@@ -9,11 +9,7 @@ const { contextBridge, ipcRenderer } = require('electron');
 // API segura para el renderer
 contextBridge.exposeInMainWorld('electronAPI', {
     // Ventana de bienvenida
-    closeWelcome: () => {
-        if (window.close) {
-            window.close();
-        }
-    },
+    closeWelcome: () => ipcRenderer.invoke('close-welcome'),
     
     // Sistema de actualizaciones
     checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
@@ -51,6 +47,28 @@ contextBridge.exposeInMainWorld('electronAPI', {
         }
     },
     
+    // Sistema de Historial Avanzado
+    history: {
+        // Registrar entrada de historial
+        addEntry: (tabId, entry) => ipcRenderer.invoke('history:add-entry', tabId, entry),
+        
+        // Obtener stack de historial
+        getStack: (tabId, direction) => ipcRenderer.invoke('history:get-stack', tabId, direction),
+        
+        // Navegar a índice específico
+        navigateToIndex: (tabId, direction, index) => ipcRenderer.invoke('history:navigate-to-index', tabId, direction, index),
+        
+        // Obtener estado de navegación
+        getState: (tabId) => ipcRenderer.invoke('history:get-state', tabId),
+        
+        // Limpiar historial de una pestaña
+        clearTab: (tabId) => ipcRenderer.invoke('history:clear-tab', tabId),
+        
+        // Event listeners
+        onStateChanged: (callback) => ipcRenderer.on('history:state-changed', (event, state) => callback(state)),
+        removeAllListeners: () => ipcRenderer.removeAllListeners('history:state-changed')
+    },
+    
     // Ventanas
     createNewWindow: () => ipcRenderer.send('create-new-window'),
     createStealthWindow: (options) => ipcRenderer.send('create-stealth-window', options),
@@ -69,7 +87,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
         if (Notification.permission === 'granted') {
             new Notification(title, { body, icon: './resourse/Nexa_Icono_PNG.png' });
         }
-    }
+    },
+    
+    // Diálogos de archivos
+    openFileDialog: (options) => ipcRenderer.invoke('open-file-dialog', options),
+    saveFileDialog: (options) => ipcRenderer.invoke('save-file-dialog', options)
 });
 
 // API para configuraciones
