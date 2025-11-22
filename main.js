@@ -92,7 +92,7 @@ function createWelcomeWindow() {
 
 function createMainWindow() {
     // Guardar que ya vio la bienvenida de esta versión
-    saveVersionSeen();
+    const isNewUpdate = saveVersionSeen();
     
     // Cargar estado guardado de la ventana
     const windowState = loadWindowState();
@@ -120,9 +120,12 @@ function createMainWindow() {
         show: false
     });
     
-    // Maximizar si estaba maximizado
-    if (windowState.isMaximized) {
+    // Maximizar si estaba maximizado O si es actualización nueva
+    if (windowState.isMaximized || isNewUpdate) {
         mainWindow.maximize();
+        if (isNewUpdate) {
+            log.info('🚀 Ventana maximizada por actualización');
+        }
     }
     
     // Guardar estado cuando cambie el tamaño o posición
@@ -258,6 +261,20 @@ function saveWindowState() {
 function saveVersionSeen() {
     try {
         const configPath = path.join(app.getPath('userData'), 'nexa-config.json');
+        let isNewUpdate = false;
+        
+        // Verificar si es actualización
+        if (fs.existsSync(configPath)) {
+            const oldConfig = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+            const oldVersion = oldConfig.lastSeenVersion || '0.0.0';
+            isNewUpdate = oldVersion !== CURRENT_VERSION;
+            if (isNewUpdate) {
+                log.info(`🆕 Actualización detectada: ${oldVersion} → ${CURRENT_VERSION}`);
+            }
+        } else {
+            isNewUpdate = true; // Primera instalación
+        }
+        
         const config = {
             lastSeenVersion: CURRENT_VERSION,
             autoUpdate: true,
@@ -267,8 +284,11 @@ function saveVersionSeen() {
         
         fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
         log.info(`✅ Version ${CURRENT_VERSION} marked as seen`);
+        
+        return isNewUpdate;
     } catch (error) {
         log.error('Error saving version:', error);
+        return false;
     }
 }
 
