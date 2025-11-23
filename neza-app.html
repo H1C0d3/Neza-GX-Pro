@@ -8207,7 +8207,7 @@
                                         <p>Restaurar pestañas al reiniciar Neza</p>
                                     </div>
                                     <label class="Neza-toggle">
-                                        <input type="checkbox" id="continueWhereLeftOff" checked>
+                                        <input type="checkbox" id="continueWhereLeftOff">
                                         <span class="toggle-slider"></span>
                                     </label>
                                 </div>
@@ -8864,6 +8864,157 @@
             activeWebview: null,
             mediaTab: null
         };
+
+        // ===================================================================
+        // SISTEMA DE RESTAURACIÓN DE SESIÓN - Continue Where You Left Off
+        // ===================================================================
+        
+        /**
+         * Guarda el estado actual de todas las pestañas en localStorage
+         * Incluye: URLs, títulos, estado de anclaje, pestaña activa
+         */
+        function saveBrowserSession() {
+            try {
+                // Verificar si la opción está habilitada
+                const continueCheckbox = document.getElementById('continueWhereLeftOff');
+                if (!continueCheckbox || !continueCheckbox.checked) {
+                    console.log('🔄 Guardar sesión deshabilitado');
+                    // Si está deshabilitado, limpiar cualquier sesión guardada
+                    localStorage.removeItem('neza_browser_session');
+                    return;
+                }
+
+                console.log('💾 Guardando sesión del navegador...');
+                
+                // Recopilar información de todas las pestañas
+                const sessionData = {
+                    tabs: tabs.map(tab => ({
+                        id: tab.id,
+                        title: tab.title || 'Nueva pestaña',
+                        url: tab.url || '',
+                        isPinned: tab.isPinned || false,
+                        // No guardamos el webview ni funciones, solo datos serializables
+                    })),
+                    activeTabId: activeTabId,
+                    timestamp: new Date().toISOString(),
+                    version: '2.2.2' // Para compatibilidad futura
+                };
+
+                // Guardar en localStorage
+                localStorage.setItem('neza_browser_session', JSON.stringify(sessionData));
+                console.log(`✅ Sesión guardada: ${sessionData.tabs.length} pestañas`);
+                
+                return true;
+            } catch (error) {
+                console.error('❌ Error al guardar sesión:', error);
+                return false;
+            }
+        }
+
+        /**
+         * Restaura la sesión guardada al iniciar el navegador
+         * Solo se ejecuta si la opción "Continuar donde lo dejaste" está habilitada
+         */
+        function restoreBrowserSession() {
+            try {
+                // Verificar si la opción está habilitada
+                const continueCheckbox = document.getElementById('continueWhereLeftOff');
+                if (!continueCheckbox || !continueCheckbox.checked) {
+                    console.log('🔄 Restaurar sesión deshabilitado - creando pestaña por defecto');
+                    return false;
+                }
+
+                // Intentar cargar sesión guardada
+                const savedSession = localStorage.getItem('neza_browser_session');
+                if (!savedSession) {
+                    console.log('📭 No hay sesión guardada');
+                    return false;
+                }
+
+                console.log('🔄 Restaurando sesión del navegador...');
+                const sessionData = JSON.parse(savedSession);
+
+                // Validar datos
+                if (!sessionData.tabs || !Array.isArray(sessionData.tabs) || sessionData.tabs.length === 0) {
+                    console.log('⚠️ Sesión guardada inválida o vacía');
+                    localStorage.removeItem('neza_browser_session');
+                    return false;
+                }
+
+                console.log(`📂 Sesión encontrada: ${sessionData.tabs.length} pestañas (guardada: ${sessionData.timestamp})`);
+
+                // Limpiar pestañas existentes (excepto la primera)
+                tabs = [];
+
+                // Restaurar cada pestaña
+                sessionData.tabs.forEach((savedTab, index) => {
+                    const isActive = savedTab.id === sessionData.activeTabId;
+                    
+                    // Crear nueva pestaña con datos guardados
+                    const newTab = {
+                        id: savedTab.id,
+                        title: savedTab.title || 'Nueva pestaña',
+                        url: savedTab.url || '',
+                        isActive: isActive,
+                        isPinned: savedTab.isPinned || false,
+                        webview: null,
+                        history: [],
+                        historyIndex: -1,
+                        ignoreNextNavigation: false
+                    };
+
+                    tabs.push(newTab);
+                });
+
+                // Establecer pestaña activa y contador
+                activeTabId = sessionData.activeTabId;
+                tabCounter = Math.max(...tabs.map(t => t.id));
+
+                // Renderizar todas las pestañas
+                renderTabs();
+
+                // Crear webviews para las pestañas restauradas
+                setTimeout(() => {
+                    tabs.forEach(tab => {
+                        if (!tab.webview) {
+                            tab.webview = createWebviewForTab(tab.id);
+                        }
+                        // Ocultar pestañas no activas
+                        if (!tab.isActive && tab.webview) {
+                            tab.webview.style.display = 'none';
+                        }
+                    });
+                    
+                    // Activar la pestaña activa y navegar a su URL
+                    switchToTab(activeTabId);
+                    
+                    // Navegar a las URLs guardadas
+                    setTimeout(() => {
+                        tabs.forEach(tab => {
+                            if (tab.url && tab.url !== '' && tab.webview) {
+                                const previousActiveId = activeTabId;
+                                activeTabId = tab.id;
+                                navigate(tab.url);
+                                activeTabId = previousActiveId;
+                            }
+                        });
+                        // Reactivar la pestaña correcta
+                        switchToTab(activeTabId);
+                    }, 500);
+                }, 200);
+
+                console.log(`✅ Sesión restaurada exitosamente: ${tabs.length} pestañas`);
+                updateStatus(`🔄 Sesión restaurada: ${tabs.length} pestañas`);
+                
+                return true;
+
+            } catch (error) {
+                console.error('❌ Error al restaurar sesión:', error);
+                // En caso de error, limpiar sesión corrupta
+                localStorage.removeItem('neza_browser_session');
+                return false;
+            }
+        }
         
         // ===================================================================
         // FUNCIONES DE SEGURIDAD - Validación de URLs
@@ -9023,9 +9174,15 @@
             updateCopyButtonState(); // Inicializar estado del botón de copia
             console.log('🚀 Neza Browser - Aplicación funcional completa');
             
-            // RENDERIZAR PESTAÑAS PRIMERO
-            renderTabs();
-            console.log('✅ Pestañas renderizadas al inicio');
+            // INTENTAR RESTAURAR SESIÓN GUARDADA
+            const sessionRestored = restoreBrowserSession();
+            if (!sessionRestored) {
+                // Si no se restauró sesión, renderizar pestaña por defecto
+                renderTabs();
+                console.log('✅ Pestañas por defecto renderizadas');
+            } else {
+                console.log('✅ Sesión restaurada desde caché');
+            }
             
             // RENDERIZAR ACCESOS RÁPIDOS
             renderQuickAccess();
@@ -18361,6 +18518,9 @@ Revisaremos tu feedback y te contactaremos si es necesario.`);
         // ============ WINDOW MANAGEMENT HELPERS ============
         
         function handleWindowClose() {
+            // Guardar sesión antes de cerrar (si está habilitado)
+            saveBrowserSession();
+            
             // Si es ventana stealth, confirmar cierre
             if (document.title.includes('Stealth')) {
                 return confirm('👻 ¿Cerrar ventana Stealth?\n\nTodos los datos de navegación privada se eliminarán.');
