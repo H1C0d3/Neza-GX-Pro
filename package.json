@@ -1,6 +1,6 @@
 {
   "name": "neza-gx-pro",
-  "version": "2.2.2",
+  "version": "2.3.1",
   "description": "Navegador Gaming de Nueva Generación - Neza GX Pro",
   "main": "main.js",
   "author": "Hi Code Studio Tech & GEISA",
@@ -12,7 +12,8 @@
   "scripts": {
     "start": "electron .",
     "build": "electron-builder",
-    "build:win": "electron-builder --win"
+    "build:win": "electron-builder --win",
+    "publish:win": "set DIST_DIR=dist&& set INSTALLER=Neza-GX-Pro-Setup-%npm_package_version%.exe&& set MANIFEST=latest.yml&& gh release create v%npm_package_version% \"%DIST_DIR%\\%INSTALLER%\" \"%DIST_DIR%\\%MANIFEST%\" --repo H1C0d3/Neza-GX-Pro --title \"Neza GX Pro %npm_package_version%\" --notes-file RELEASE-NOTES.md"
   },
   "dependencies": {
     "electron-log": "^5.1.0",
