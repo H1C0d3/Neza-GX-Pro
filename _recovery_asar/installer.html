@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neza GX Pro - Instalador</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes progressGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 212, 170, 0.5); }
+            50% { box-shadow: 0 0 30px rgba(0, 212, 170, 0.8); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 25%, #0f0f0f 50%, #1a1a1a 75%, #0a0a0a 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Partículas de fondo */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(0, 212, 170, 0.5);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px);
+                opacity: 0;
+            }
+        }
+
+        /* Líneas decorativas */
+        .lines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            opacity: 0.1;
+        }
+
+        .line {
+            position: absolute;
+            width: 1px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #00D4AA, transparent);
+        }
+
+        .installer-container {
+            background: linear-gradient(145deg, rgba(26, 26, 26, 0.95), rgba(20, 20, 20, 0.98));
+            border-radius: 16px;
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            box-shadow: 
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                0 0 0 1px rgba(0, 212, 170, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            width: 95%;
+            max-width: 550px;
+            max-height: 90vh;
+            padding: 0;
+            position: relative;
+            z-index: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Header con gradiente */
+        .installer-header {
+            background: linear-gradient(135deg, #00D4AA 0%, #00A8FF 100%);
+            padding: 25px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .installer-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: spin 20s linear infinite;
+        }
+
+        .logo-container {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-main {
+            height: 60px;
+            filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.3));
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .logo-icon {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            height: 40px;
+            opacity: 0.8;
+        }
+
+        .installer-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .installer-subtitle {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 500;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Contenido principal */
+        .installer-content {
+            padding: 30px 25px;
+            text-align: center;
+        }
+
+        .state-container {
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .state {
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .state.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Estado: Welcome */
+        .welcome-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .welcome-text {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00D4AA, #00A8FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .welcome-description {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 25px;
+            line-height: 1.5;
+            max-width: 450px;
+        }
+
+        /* Características destacadas */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 25px;
+            max-width: 450px;
+        }
+
+        .feature-item {
+            background: rgba(0, 212, 170, 0.05);
+            border: 1px solid rgba(0, 212, 170, 0.2);
+            border-radius: 10px;
+            padding: 15px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-item:hover {
+            background: rgba(0, 212, 170, 0.1);
+            border-color: rgba(0, 212, 170, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .feature-text {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 500;
+        }
+
+        /* Botones */
+        .button-group {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #00D4AA, #00A8FF);
+            color: white;
+            box-shadow: 0 4px 20px rgba(0, 212, 170, 0.4);
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 6px 30px rgba(0, 212, 170, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-icon {
+            font-size: 20px;
+        }
+
+        /* Estado: Installing */
+        .installing-spinner {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .spinner-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 4px solid transparent;
+            border-top-color: #00D4AA;
+            border-radius: 50%;
+            animation: spin 1.5s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
+        }
+
+        .spinner-ring:nth-child(2) {
+            border-top-color: #00A8FF;
+            animation-delay: 0.2s;
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+        }
+
+        .spinner-ring:nth-child(3) {
+            border-top-color: rgba(0, 212, 170, 0.5);
+            animation-delay: 0.4s;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+        }
+
+        .installing-logo {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .installing-text {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .installing-step {
+            font-size: 14px;
+            color: rgba(0, 212, 170, 1);
+            margin-bottom: 30px;
+            font-weight: 500;
+        }
+
+        /* Barra de progreso */
+        .progress-container {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .progress-bar-bg {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00D4AA, #00A8FF);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 20px rgba(0, 212, 170, 0.6);
+            animation: progressGlow 2s ease-in-out infinite;
+        }
+
+        .progress-text {
+            margin-top: 10px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .installing-details {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+
+        /* Estado: Complete */
+        .complete-icon {
+            font-size: 100px;
+            margin-bottom: 30px;
+            animation: fadeIn 0.5s ease-out, pulse 2s ease-in-out infinite 0.5s;
+        }
+
+        .complete-text {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #00D4AA, #00A8FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .complete-description {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .version-badge {
+            background: rgba(0, 212, 170, 0.1);
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .version-badge-icon {
+            font-size: 16px;
+        }
+
+        .version-badge-text {
+            font-size: 13px;
+            color: #00D4AA;
+            font-weight: 600;
+        }
+
+        /* Checkbox personalizado */
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 20px 0;
+            cursor: pointer;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            display: none;
+        }
+
+        .checkbox-custom {
+            width: 20px;
+            height: 20px;
+            min-width: 20px;
+            min-height: 20px;
+            border: 2px solid rgba(0, 212, 170, 0.5);
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            background: rgba(0, 212, 170, 0.05);
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom {
+            background: linear-gradient(135deg, #00D4AA, #00A8FF);
+            border-color: #00D4AA;
+        }
+
+        .checkbox-custom::after {
+            content: '✓';
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.2s ease;
+        }
+
+        .checkbox-container input[type="checkbox"]:checked + .checkbox-custom::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .checkbox-label {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.4;
+        }
+
+        /* Footer */
+        .installer-footer {
+            padding: 15px 25px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.5);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(0, 212, 170, 0.8);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #00D4AA;
+        }
+
+        /* Close button */
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 95, 86, 0.8);
+            border-color: #FF5F56;
+            transform: rotate(90deg);
+        }
+
+        .close-icon {
+            font-size: 18px;
+            color: white;
+        }
+
+        /* Media Queries para pantallas pequeñas */
+        @media (max-height: 700px) {
+            .installer-container {
+                max-height: 95vh;
+            }
+            .installer-header {
+                padding: 20px 15px;
+            }
+            .logo-main {
+                height: 50px;
+            }
+            .installer-title {
+                font-size: 20px;
+            }
+            .installer-subtitle {
+                font-size: 12px;
+            }
+            .installer-content {
+                padding: 20px 20px;
+            }
+            .welcome-icon {
+                font-size: 50px;
+                margin-bottom: 15px;
+            }
+            .features-grid {
+                gap: 10px;
+                margin-bottom: 20px;
+            }
+            .feature-item {
+                padding: 12px 10px;
+            }
+            .feature-icon {
+                font-size: 24px;
+                margin-bottom: 6px;
+            }
+            .feature-text {
+                font-size: 12px;
+            }
+            .checkbox-container {
+                margin: 15px 0;
+            }
+            .button-group {
+                margin-top: 15px;
+            }
+            .btn {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .installer-container {
+                width: 98%;
+                max-width: none;
+            }
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            .footer-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Partículas de fondo -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Líneas decorativas -->
+    <div class="lines">
+        <div class="line" style="left: 10%;"></div>
+        <div class="line" style="left: 30%;"></div>
+        <div class="line" style="left: 50%;"></div>
+        <div class="line" style="left: 70%;"></div>
+        <div class="line" style="left: 90%;"></div>
+    </div>
+
+    <div class="installer-container">
+        <!-- Close Button -->
+        <div class="close-btn" onclick="closeInstaller()">
+            <span class="close-icon">×</span>
+        </div>
+
+        <!-- Header -->
+        <div class="installer-header">
+            <div class="logo-container">
+                <img src="../resourse/Neza_GX_Pro_Logo_PNG.png" alt="Neza GX Pro" class="logo-main">
+            </div>
+            <h1 class="installer-title">Navegador Gaming de Nueva Generación</h1>
+            <p class="installer-subtitle">Potencia, velocidad y personalización extrema</p>
+        </div>
+
+        <!-- Content -->
+        <div class="installer-content">
+            <div class="state-container">
+                <!-- Estado: Welcome -->
+                <div class="state active" id="state-welcome">
+                    <div class="welcome-icon">🚀</div>
+                    <h2 class="welcome-text">Bienvenido a Neza GX Pro</h2>
+                    <p class="welcome-description">
+                        El navegador definitivo para gamers. Rendimiento extremo, control total de recursos y diseño personalizable.
+                    </p>
+
+                    <div class="features-grid">
+                        <div class="feature-item">
+                            <div class="feature-icon">⚡</div>
+                            <div class="feature-text">Ultra Rápido</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🛡️</div>
+                            <div class="feature-text">Máxima Seguridad</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🎮</div>
+                            <div class="feature-text">Gaming Mode</div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-icon">🔄</div>
+                            <div class="feature-text">Auto-Updates</div>
+                        </div>
+                    </div>
+
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="acceptTerms" checked>
+                        <div class="checkbox-custom"></div>
+                        <span class="checkbox-label">
+                            Acepto los términos de servicio y política de privacidad
+                        </span>
+                    </label>
+
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="closeInstaller()">
+                            <span class="btn-icon">✕</span>
+                            <span>Cancelar</span>
+                        </button>
+                        <button class="btn btn-primary" onclick="startInstallation()">
+                            <span class="btn-icon">📥</span>
+                            <span>Instalar Neza GX Pro</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Estado: Installing -->
+                <div class="state" id="state-installing">
+                    <div class="installing-spinner">
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <div class="spinner-ring"></div>
+                        <img src="../resourse/Neza_GX_Pro_Icono_PNG.png" alt="Installing" class="installing-logo">
+                    </div>
+                    <h2 class="installing-text">Instalando Neza GX Pro</h2>
+                    <p class="installing-step" id="installStep">Preparando instalación...</p>
+                    
+                    <div class="progress-container">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="progressBar"></div>
+                        </div>
+                        <p class="progress-text" id="progressText">0%</p>
+                    </div>
+
+                    <p class="installing-details" id="installDetails">
+                        Configurando el entorno de navegación...<br>
+                        Esto puede tomar unos momentos
+                    </p>
+                </div>
+
+                <!-- Estado: Complete -->
+                <div class="state" id="state-complete">
+                    <div class="complete-icon">🎉</div>
+                    <h2 class="complete-text">¡Instalación Completada!</h2>
+                    <p class="complete-description">
+                        Neza GX Pro está listo para usar.<br>
+                        Disfruta de la mejor experiencia de navegación.
+                    </p>
+
+                    <div class="version-badge">
+                        <span class="version-badge-icon">✓</span>
+                        <span class="version-badge-text">Versión 2.1.0 instalada</span>
+                    </div>
+
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="launchNow" checked>
+                        <div class="checkbox-custom"></div>
+                        <span class="checkbox-label">
+                            Iniciar Neza GX Pro ahora
+                        </span>
+                    </label>
+
+                    <div class="button-group">
+                        <button class="btn btn-secondary" onclick="closeInstaller()">
+                            <span class="btn-icon">◀</span>
+                            <span>Finalizar</span>
+                        </button>
+                        <button class="btn btn-primary" onclick="launchBrowser()">
+                            <span class="btn-icon">🚀</span>
+                            <span>Iniciar Navegador</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="installer-footer">
+            <div>© 2024 Hi Code Studio Tech & GEISA</div>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Términos de Servicio</a>
+                <a href="#" class="footer-link">Privacidad</a>
+                <a href="#" class="footer-link">Soporte</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Crear partículas
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Cambiar estado
+        function changeState(stateName) {
+            document.querySelectorAll('.state').forEach(state => {
+                state.classList.remove('active');
+            });
+            document.getElementById('state-' + stateName).classList.add('active');
+        }
+
+        // Iniciar instalación
+        function startInstallation() {
+            const acceptTerms = document.getElementById('acceptTerms').checked;
+            
+            if (!acceptTerms) {
+                alert('Por favor, acepta los términos de servicio para continuar.');
+                return;
+            }
+
+            changeState('installing');
+            simulateInstallation();
+        }
+
+        // Simular proceso de instalación
+        function simulateInstallation() {
+            const steps = [
+                { progress: 10, step: 'Verificando requisitos del sistema...', details: 'Comprobando compatibilidad...' },
+                { progress: 20, step: 'Descargando archivos necesarios...', details: 'Conectando con servidores de Neza...' },
+                { progress: 35, step: 'Extrayendo componentes...', details: 'Preparando motor Chromium...' },
+                { progress: 50, step: 'Instalando dependencias...', details: 'Configurando Electron Framework...' },
+                { progress: 65, step: 'Configurando navegador...', details: 'Aplicando configuraciones predeterminadas...' },
+                { progress: 80, step: 'Creando accesos directos...', details: 'Registrando protocolo neza://...' },
+                { progress: 90, step: 'Finalizando instalación...', details: 'Optimizando rendimiento inicial...' },
+                { progress: 100, step: 'Instalación completada', details: '¡Todo listo para usar!' }
+            ];
+
+            let currentStep = 0;
+
+            const interval = setInterval(() => {
+                if (currentStep < steps.length) {
+                    const step = steps[currentStep];
+                    document.getElementById('progressBar').style.width = step.progress + '%';
+                    document.getElementById('progressText').textContent = step.progress + '%';
+                    document.getElementById('installStep').textContent = step.step;
+                    document.getElementById('installDetails').innerHTML = step.details;
+                    currentStep++;
+                } else {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        changeState('complete');
+                    }, 500);
+                }
+            }, 800);
+        }
+
+        // Iniciar navegador
+        function launchBrowser() {
+            const launchNow = document.getElementById('launchNow').checked;
+            
+            if (launchNow) {
+                // Aquí se comunicaría con Electron para abrir el navegador
+                if (typeof window.installerAPI !== 'undefined') {
+                    window.installerAPI.launchBrowser();
+                } else {
+                    console.log('Iniciando Neza GX Pro...');
+                }
+            }
+            
+            closeInstaller();
+        }
+
+        // Cerrar instalador
+        function closeInstaller() {
+            if (typeof window.installerAPI !== 'undefined') {
+                window.installerAPI.closeInstaller();
+            } else {
+                window.close();
+            }
+        }
+
+        // Agregar efectos de teclado
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeInstaller();
+            }
+        });
+    </script>
+</body>
+</html>

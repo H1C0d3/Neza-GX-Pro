@@ -1,0 +1,69 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release-win:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Windows installer
+        run: npm run build:win -- --publish never
+
+      - name: Ensure tag exists for manual runs
+        if: github.event_name == 'workflow_dispatch'
+        shell: bash
+        run: |
+          if [[ -z "${GITHUB_REF_NAME}" || "${GITHUB_REF_NAME}" == "master" || "${GITHUB_REF_NAME}" == "main" ]]; then
+            VERSION="$(node -p "require('./package.json').version")"
+            TAG="v${VERSION}"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag "${TAG}"
+            git push origin "${TAG}"
+            echo "release_tag=${TAG}" >> "$GITHUB_OUTPUT"
+          else
+            echo "release_tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          fi
+        id: tag_output
+
+      - name: Resolve release tag
+        id: resolve_tag
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "push" ]]; then
+            echo "tag=${GITHUB_REF_NAME}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${{ steps.tag_output.outputs.release_tag }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload release assets
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.resolve_tag.outputs.tag }}
+          name: Neza GX Pro ${{ steps.resolve_tag.outputs.tag }}
+          body_path: release-notes.md
+          files: |
+            dist/Neza-GX-Pro-Setup-*.exe
+            dist/latest.yml
+            dist/Neza-GX-Pro-Setup-*.exe.blockmap
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

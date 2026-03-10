@@ -1,0 +1,96 @@
+ACUERDO DE LICENCIA DE USUARIO FINAL (EULA)
+Neza GX Pro Browser
+
+Copyright © 2024 Hi Code Studio Tech & GEISA
+Todos los derechos reservados.
+
+Este Acuerdo de Licencia de Usuario Final ("EULA") es un acuerdo legal entre usted (ya sea un individuo o una entidad) y Hi Code Studio Tech & GEISA para el software Neza GX Pro Browser, que incluye software de computadora y puede incluir medios asociados, materiales impresos y documentación "en línea" o electrónica ("SOFTWARE").
+
+Al instalar, copiar o utilizar el SOFTWARE, usted acepta estar sujeto a los términos de este EULA. Si no está de acuerdo con los términos de este EULA, no instale ni utilice el SOFTWARE.
+
+1. CONCESIÓN DE LICENCIA
+Hi Code Studio Tech & GEISA le otorga una licencia personal, no exclusiva, intransferible y limitada para usar el SOFTWARE en sus dispositivos personales.
+
+2. DESCRIPCIÓN DE OTROS DERECHOS Y LIMITACIONES
+
+2.1 Limitaciones de Ingeniería Inversa, Descompilación y Desensamblaje
+No puede realizar ingeniería inversa, descompilar ni desensamblar el SOFTWARE, excepto y solo en la medida en que dicha actividad esté expresamente permitida por la ley aplicable.
+
+2.2 Separación de Componentes
+El SOFTWARE se licencia como un solo producto. Sus componentes no pueden ser separados para su uso en más de un dispositivo.
+
+2.3 Alquiler
+No puede alquilar, arrendar o prestar el SOFTWARE.
+
+2.4 Transferencia de Software
+Puede transferir permanentemente todos sus derechos bajo este EULA, siempre que el destinatario acepte los términos de este EULA.
+
+2.5 Terminación
+Sin perjuicio de cualquier otro derecho, Hi Code Studio Tech & GEISA puede rescindir este EULA si no cumple con los términos y condiciones del mismo.
+
+3. DERECHOS DE AUTOR
+Todos los títulos y derechos de autor en y para el SOFTWARE (incluidos, entre otros, cualquier imagen, fotografía, animación, video, audio, música, texto y "applets" incorporados en el SOFTWARE), los materiales impresos adjuntos y cualquier copia del SOFTWARE son propiedad de Hi Code Studio Tech & GEISA.
+
+4. SIN GARANTÍAS
+Hi Code Studio Tech & GEISA proporciona expresamente el SOFTWARE "TAL CUAL" sin garantías de ningún tipo, ya sean expresas o implícitas, incluidas, entre otras, las garantías implícitas de comerciabilidad e idoneidad para un propósito particular.
+
+5. LIMITACIÓN DE RESPONSABILIDAD
+En ningún caso Hi Code Studio Tech & GEISA será responsable de ningún daño especial, incidental, indirecto o consecuente (incluidos, entre otros, los daños por pérdida de beneficios comerciales, interrupción del negocio, pérdida de información comercial u otra pérdida pecuniaria) que surja del uso o la imposibilidad de usar el SOFTWARE.
+
+6. RECOPILACIÓN Y USO DE DATOS
+
+6.1 Datos de Uso
+El SOFTWARE puede recopilar información sobre cómo usa la aplicación, incluidas estadísticas de uso anónimas y datos de diagnóstico. Esta información se utiliza para mejorar el SOFTWARE.
+
+6.2 Actualizaciones Automáticas
+El SOFTWARE puede verificar automáticamente y descargar actualizaciones desde los servidores de Hi Code Studio Tech & GEISA.
+
+6.3 Privacidad
+Su privacidad es importante para nosotros. Consulte nuestra Política de Privacidad para obtener más información sobre cómo recopilamos y usamos sus datos.
+
+7. FUNCIONES DE NAVEGACIÓN
+
+7.1 Contenido Web
+El SOFTWARE le permite acceder a contenido web de terceros. Hi Code Studio Tech & GEISA no controla, respalda ni asume ninguna responsabilidad por dicho contenido.
+
+7.2 Búsqueda Web
+Las funciones de búsqueda pueden estar proporcionadas por terceros (como Google, Bing, etc.). El uso de estos servicios está sujeto a sus propios términos y condiciones.
+
+8. CÓDIGO ABIERTO
+El SOFTWARE puede incluir componentes de código abierto. Estos componentes están sujetos a sus propias licencias, que se incluyen en la documentación del SOFTWARE.
+
+9. ACTUALIZACIONES
+Hi Code Studio Tech & GEISA puede proporcionar actualizaciones periódicas al SOFTWARE. Estas actualizaciones pueden instalarse automáticamente dependiendo de su configuración.
+
+10. LEY APLICABLE
+Este EULA se regirá e interpretará de acuerdo con las leyes del país donde Hi Code Studio Tech & GEISA tiene su sede principal, sin tener en cuenta sus conflictos de principios legales.
+
+11. ACUERDO COMPLETO
+Este EULA constituye el acuerdo completo entre usted y Hi Code Studio Tech & GEISA con respecto al SOFTWARE y reemplaza todas las comunicaciones, representaciones o publicidad anteriores o contemporáneas con respecto al SOFTWARE.
+
+12. CONTACTO
+Si tiene alguna pregunta sobre este EULA, póngase en contacto con:
+Hi Code Studio Tech
+Email: support@hicode.tech
+Web: https://hicode.tech
+
+Al hacer clic en "Acepto" o instalar el SOFTWARE, reconoce que ha leído este EULA, lo comprende y acepta estar sujeto a sus términos y condiciones.
+
+---
+
+POLÍTICA DE PRIVACIDAD - RESUMEN
+
+Neza GX Pro respeta su privacidad:
+
+• Solo recopilamos datos anónimos de uso para mejorar el software
+• No vendemos ni compartimos sus datos personales con terceros
+• Puede desactivar la recopilación de datos en la configuración
+• Los datos de navegación se almacenan localmente en su dispositivo
+• Cumplimos con GDPR y otras regulaciones de privacidad
+
+Para más información, visite: https://hicode.tech/privacy
+
+---
+
+Última actualización: Noviembre 2024
+Versión del EULA: 2.1.0

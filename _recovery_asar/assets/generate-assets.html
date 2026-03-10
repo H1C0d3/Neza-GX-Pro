@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Assets NSIS - Neza GX Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A0E27 0%, #1a1f3a 100%);
+            color: #fff;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #00D4AA 0%, #7B68EE 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #8B93B8;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section h2 {
+            color: #00D4AA;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .canvas-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+        }
+
+        .canvas-wrapper {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        canvas {
+            border: 2px solid #00D4AA;
+            border-radius: 8px;
+            display: block;
+            margin: 0 auto 15px;
+            background: #fff;
+        }
+
+        .canvas-info {
+            color: #8B93B8;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #00D4AA 0%, #7B68EE 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 212, 170, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .info-box {
+            background: rgba(0, 212, 170, 0.1);
+            border-left: 4px solid #00D4AA;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .info-box h3 {
+            color: #00D4AA;
+            margin-bottom: 8px;
+        }
+
+        .info-box p {
+            color: #B8C0E0;
+            line-height: 1.6;
+        }
+
+        .specs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .spec-item {
+            background: rgba(123, 104, 238, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(123, 104, 238, 0.3);
+        }
+
+        .spec-label {
+            color: #7B68EE;
+            font-weight: 600;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .spec-value {
+            color: #fff;
+            font-size: 1.1em;
+        }
+
+        .download-all {
+            text-align: center;
+            margin-top: 30px;
+            padding: 30px;
+            background: rgba(0, 212, 170, 0.05);
+            border-radius: 15px;
+        }
+
+        .download-all button {
+            font-size: 1.2em;
+            padding: 15px 50px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 Generador de Assets NSIS</h1>
+        <p class="subtitle">Neza GX Pro Installer - Imágenes para Windows NSIS</p>
+
+        <div class="info-box">
+            <h3>📋 Instrucciones</h3>
+            <p>
+                Este generador crea automáticamente las imágenes necesarias para el instalador NSIS de Windows.
+                Las imágenes se generan con el branding de Neza GX Pro y las dimensiones exactas requeridas por NSIS.
+            </p>
+        </div>
+
+        <!-- Header NSIS -->
+        <div class="section">
+            <h2>1. Header NSIS (Encabezado Superior)</h2>
+            <div class="specs">
+                <div class="spec-item">
+                    <div class="spec-label">Dimensiones</div>
+                    <div class="spec-value">150 × 57 píxeles</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Formato</div>
+                    <div class="spec-value">BMP (24-bit)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ubicación</div>
+                    <div class="spec-value">Parte superior del instalador</div>
+                </div>
+            </div>
+            
+            <div class="canvas-container">
+                <div class="canvas-wrapper">
+                    <div class="canvas-info">Vista previa 2x (300×114)</div>
+                    <canvas id="headerCanvas" width="300" height="114"></canvas>
+                    <button onclick="downloadImage('headerCanvas', 'installer-header.png', 150, 57)">
+                        💾 Descargar PNG
+                    </button>
+                    <button onclick="regenerateHeader()">
+                        🔄 Regenerar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar NSIS -->
+        <div class="section">
+            <h2>2. Sidebar NSIS (Barra Lateral)</h2>
+            <div class="specs">
+                <div class="spec-item">
+                    <div class="spec-label">Dimensiones</div>
+                    <div class="spec-value">164 × 314 píxeles</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Formato</div>
+                    <div class="spec-value">BMP (24-bit)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ubicación</div>
+                    <div class="spec-value">Lado izquierdo del instalador</div>
+                </div>
+            </div>
+            
+            <div class="canvas-container">
+                <div class="canvas-wrapper">
+                    <div class="canvas-info">Vista previa 2x (328×628)</div>
+                    <canvas id="sidebarCanvas" width="328" height="628"></canvas>
+                    <button onclick="downloadImage('sidebarCanvas', 'installer-sidebar.png', 164, 314)">
+                        💾 Descargar PNG
+                    </button>
+                    <button onclick="regenerateSidebar()">
+                        🔄 Regenerar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DMG Background -->
+        <div class="section">
+            <h2>3. DMG Background (macOS)</h2>
+            <div class="specs">
+                <div class="spec-item">
+                    <div class="spec-label">Dimensiones</div>
+                    <div class="spec-value">540 × 380 píxeles</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Formato</div>
+                    <div class="spec-value">PNG (32-bit RGBA)</div>
+                </div>
+                <div class="spec-item">
+                    <div class="spec-label">Ubicación</div>
+                    <div class="spec-value">Fondo del DMG de macOS</div>
+                </div>
+            </div>
+            
+            <div class="canvas-container">
+                <div class="canvas-wrapper">
+                    <div class="canvas-info">Vista previa (540×380)</div>
+                    <canvas id="dmgCanvas" width="540" height="380"></canvas>
+                    <button onclick="downloadImage('dmgCanvas', 'dmg-background.png', 540, 380)">
+                        💾 Descargar PNG
+                    </button>
+                    <button onclick="regenerateDMG()">
+                        🔄 Regenerar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="download-all">
+            <h2 style="margin-bottom: 20px;">📦 Descargar Todo</h2>
+            <button onclick="downloadAll()">
+                ⬇️ Descargar Todos los Assets
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Colores de Neza GX Pro
+        const colors = {
+            primary: '#00D4AA',
+            secondary: '#7B68EE',
+            dark: '#0A0E27',
+            darker: '#050812',
+            light: '#ffffff'
+        };
+
+        // Función para crear gradiente
+        function createGradient(ctx, width, height, angle = 135) {
+            const radians = angle * Math.PI / 180;
+            const x1 = width / 2 - Math.cos(radians) * width / 2;
+            const y1 = height / 2 - Math.sin(radians) * height / 2;
+            const x2 = width / 2 + Math.cos(radians) * width / 2;
+            const y2 = height / 2 + Math.sin(radians) * height / 2;
+            
+            const gradient = ctx.createLinearGradient(x1, y1, x2, y2);
+            gradient.addColorStop(0, colors.primary);
+            gradient.addColorStop(1, colors.secondary);
+            return gradient;
+        }
+
+        // Generar Header NSIS (150x57)
+        function generateHeader() {
+            const canvas = document.getElementById('headerCanvas');
+            const ctx = canvas.getContext('2d');
+            const scale = 2; // Para mejor calidad visual
+            
+            // Fondo oscuro con gradiente sutil
+            const bgGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            bgGradient.addColorStop(0, colors.darker);
+            bgGradient.addColorStop(1, colors.dark);
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Línea decorativa superior (gradiente)
+            const lineGradient = createGradient(ctx, canvas.width, 8, 90);
+            ctx.fillStyle = lineGradient;
+            ctx.fillRect(0, 0, canvas.width, 8);
+            
+            // Texto "NEZA GX PRO"
+            ctx.font = 'bold 32px Arial';
+            ctx.fillStyle = colors.light;
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('NEZA', 20, canvas.height / 2);
+            
+            // "GX PRO" con gradiente
+            const textGradient = createGradient(ctx, canvas.width, canvas.height, 90);
+            ctx.fillStyle = textGradient;
+            ctx.fillText('GX PRO', 100, canvas.height / 2);
+            
+            // Decoración: círculo con gradiente
+            const circleGradient = ctx.createRadialGradient(
+                canvas.width - 30, canvas.height / 2, 0,
+                canvas.width - 30, canvas.height / 2, 20
+            );
+            circleGradient.addColorStop(0, colors.primary);
+            circleGradient.addColorStop(1, colors.secondary);
+            ctx.fillStyle = circleGradient;
+            ctx.beginPath();
+            ctx.arc(canvas.width - 30, canvas.height / 2, 15, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Generar Sidebar NSIS (164x314)
+        function generateSidebar() {
+            const canvas = document.getElementById('sidebarCanvas');
+            const ctx = canvas.getContext('2d');
+            const scale = 2;
+            
+            // Fondo con gradiente vertical
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            bgGradient.addColorStop(0, colors.dark);
+            bgGradient.addColorStop(0.5, colors.darker);
+            bgGradient.addColorStop(1, colors.dark);
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Barra lateral con gradiente Neza
+            const sideGradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+            sideGradient.addColorStop(0, colors.primary);
+            sideGradient.addColorStop(1, colors.secondary);
+            ctx.fillStyle = sideGradient;
+            ctx.fillRect(0, 0, 12, canvas.height);
+            
+            // Logo/Icono en el centro
+            const centerY = canvas.height / 2;
+            
+            // Círculo exterior con glow
+            ctx.shadowColor = colors.primary;
+            ctx.shadowBlur = 30;
+            const outerGradient = ctx.createRadialGradient(
+                canvas.width / 2, centerY, 0,
+                canvas.width / 2, centerY, 60
+            );
+            outerGradient.addColorStop(0, colors.primary);
+            outerGradient.addColorStop(1, colors.secondary);
+            ctx.fillStyle = outerGradient;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, centerY, 50, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Reset shadow
+            ctx.shadowBlur = 0;
+            
+            // Círculo interior
+            ctx.fillStyle = colors.dark;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, centerY, 40, 0, Math.PI * 2);
+            ctx.fill();
+            
+            // Letra "N" estilizada
+            ctx.font = 'bold 60px Arial';
+            ctx.fillStyle = colors.light;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('N', canvas.width / 2, centerY);
+            
+            // Texto superior
+            ctx.font = 'bold 24px Arial';
+            ctx.fillStyle = colors.light;
+            ctx.fillText('NEZA', canvas.width / 2, 80);
+            
+            ctx.font = '18px Arial';
+            const topGradient = createGradient(ctx, canvas.width, 20, 90);
+            ctx.fillStyle = topGradient;
+            ctx.fillText('GX PRO', canvas.width / 2, 110);
+            
+            // Texto inferior
+            ctx.font = '16px Arial';
+            ctx.fillStyle = colors.primary;
+            ctx.fillText('INSTALLER', canvas.width / 2, canvas.height - 80);
+            
+            ctx.font = '12px Arial';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+            ctx.fillText('Version 2.1.0', canvas.width / 2, canvas.height - 50);
+            
+            // Líneas decorativas
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = 2;
+            ctx.globalAlpha = 0.3;
+            
+            for (let i = 0; i < 5; i++) {
+                const y = 150 + i * 20;
+                ctx.beginPath();
+                ctx.moveTo(30, y);
+                ctx.lineTo(canvas.width - 30, y);
+                ctx.stroke();
+            }
+            
+            ctx.globalAlpha = 1;
+        }
+
+        // Generar DMG Background (540x380)
+        function generateDMG() {
+            const canvas = document.getElementById('dmgCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo con gradiente suave
+            const bgGradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+            bgGradient.addColorStop(0, '#f5f5f7');
+            bgGradient.addColorStop(1, '#e8e8ed');
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Círculos decorativos de fondo
+            ctx.globalAlpha = 0.05;
+            const circles = [
+                { x: 100, y: 100, r: 150 },
+                { x: 440, y: 280, r: 120 },
+                { x: 270, y: 190, r: 100 }
+            ];
+            
+            circles.forEach(circle => {
+                const circleGrad = ctx.createRadialGradient(
+                    circle.x, circle.y, 0,
+                    circle.x, circle.y, circle.r
+                );
+                circleGrad.addColorStop(0, colors.primary);
+                circleGrad.addColorStop(1, 'transparent');
+                ctx.fillStyle = circleGrad;
+                ctx.beginPath();
+                ctx.arc(circle.x, circle.y, circle.r, 0, Math.PI * 2);
+                ctx.fill();
+            });
+            
+            ctx.globalAlpha = 1;
+            
+            // Logo central
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2 - 40;
+            
+            // Círculo con gradiente
+            ctx.shadowColor = 'rgba(0, 212, 170, 0.3)';
+            ctx.shadowBlur = 20;
+            const logoGradient = ctx.createRadialGradient(
+                centerX, centerY, 0,
+                centerX, centerY, 60
+            );
+            logoGradient.addColorStop(0, colors.primary);
+            logoGradient.addColorStop(1, colors.secondary);
+            ctx.fillStyle = logoGradient;
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, 50, 0, Math.PI * 2);
+            ctx.fill();
+            
+            ctx.shadowBlur = 0;
+            
+            // Letra "N"
+            ctx.font = 'bold 50px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('N', centerX, centerY);
+            
+            // Texto debajo
+            ctx.font = 'bold 32px Arial';
+            ctx.fillStyle = colors.dark;
+            ctx.fillText('Neza GX Pro', centerX, centerY + 90);
+            
+            // Instrucciones
+            ctx.font = '16px Arial';
+            ctx.fillStyle = '#666';
+            ctx.fillText('Arrastra el icono a la carpeta Aplicaciones', centerX, canvas.height - 30);
+            
+            // Flecha indicadora (simulada)
+            ctx.strokeStyle = colors.primary;
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(centerX - 100, centerY + 130);
+            ctx.lineTo(centerX + 100, centerY + 130);
+            ctx.stroke();
+            
+            // Punta de flecha
+            ctx.beginPath();
+            ctx.moveTo(centerX + 100, centerY + 130);
+            ctx.lineTo(centerX + 85, centerY + 120);
+            ctx.moveTo(centerX + 100, centerY + 130);
+            ctx.lineTo(centerX + 85, centerY + 140);
+            ctx.stroke();
+        }
+
+        // Función para descargar imagen
+        function downloadImage(canvasId, filename, targetWidth, targetHeight) {
+            const canvas = document.getElementById(canvasId);
+            
+            // Crear canvas temporal con el tamaño final
+            const tempCanvas = document.createElement('canvas');
+            tempCanvas.width = targetWidth;
+            tempCanvas.height = targetHeight;
+            const tempCtx = tempCanvas.getContext('2d');
+            
+            // Escalar la imagen al tamaño final
+            tempCtx.drawImage(canvas, 0, 0, targetWidth, targetHeight);
+            
+            // Descargar
+            tempCanvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                a.click();
+                URL.revokeObjectURL(url);
+            }, 'image/png');
+        }
+
+        // Regenerar imágenes
+        function regenerateHeader() {
+            generateHeader();
+        }
+
+        function regenerateSidebar() {
+            generateSidebar();
+        }
+
+        function regenerateDMG() {
+            generateDMG();
+        }
+
+        // Descargar todas las imágenes
+        function downloadAll() {
+            setTimeout(() => downloadImage('headerCanvas', 'installer-header.png', 150, 57), 100);
+            setTimeout(() => downloadImage('sidebarCanvas', 'installer-sidebar.png', 164, 314), 500);
+            setTimeout(() => downloadImage('dmgCanvas', 'dmg-background.png', 540, 380), 900);
+            
+            alert('✅ Descargando todas las imágenes...\n\nRevisa tu carpeta de descargas en unos segundos.');
+        }
+
+        // Generar todas las imágenes al cargar
+        window.onload = function() {
+            generateHeader();
+            generateSidebar();
+            generateDMG();
+            console.log('✅ Todas las imágenes generadas correctamente');
+        };
+    </script>
+</body>
+</html>

@@ -1,5 +1,5 @@
-@echo off
 
+@echo off
 REM =======================================
 REM VERIFICAR PRIVILEGIOS DE ADMINISTRADOR
 REM =======================================
@@ -46,6 +46,19 @@ cd /d "%~dp0"
 REM Copiar package-build.json sobre package.json
 echo Preparando configuracion...
 copy /Y package-build.json package.json >nul
+
+
+REM Detectar version objetivo desde package.json
+for /f "usebackq tokens=*" %%V in (`powershell -NoProfile -ExecutionPolicy Bypass -Command "(Get-Content -Raw 'package.json' | ConvertFrom-Json).version"`) do set APP_VERSION=%%V
+echo ===============================
+echo   VERSION DE RELEASE: %APP_VERSION%
+echo ===============================
+if not "%APP_VERSION%"=="3.0.0" (
+    echo ERROR: La version en package.json no es 3.0.0
+    echo Cancela el build o actualiza package.json antes de publicar el release 3.0.0
+    pause
+    exit /b 1
+)
 
 REM Instalar electron-builder si no existe
 if not exist "node_modules\electron-builder" (
@@ -98,12 +111,18 @@ if %ERRORLEVEL% EQU 0 (
     echo %~dp0dist\
     echo.
     
-    if exist "%~dp0dist\Neza-GX-Pro-Setup-2.2.0.exe" (
-        echo [OK] Neza-GX-Pro-Setup-2.2.0.exe
-        start explorer "%~dp0dist"
-    ) else (
-        echo [ADVERTENCIA] No se encontro el Setup.exe
-    )
+        REM Detectar version desde package.json y verificar instalador dinámicamente
+        for /f "usebackq tokens=*" %%V in (`powershell -NoProfile -ExecutionPolicy Bypass -Command "(Get-Content -Raw 'package.json' | ConvertFrom-Json).version"`) do set APP_VERSION=%%V
+        set INSTALLER_NAME=Neza-GX-Pro-Setup-%APP_VERSION%.exe
+
+        if exist "%~dp0dist\%INSTALLER_NAME%" (
+            echo [OK] %INSTALLER_NAME%
+            start explorer "%~dp0dist"
+        ) else (
+            echo [ADVERTENCIA] No se encontro el Setup.exe esperado: %INSTALLER_NAME%
+            echo Archivos en dist:
+            dir /b "%~dp0dist" | findstr /i "Setup"
+        )
 ) else (
     echo ========================================
     echo   ERROR EN EL BUILD

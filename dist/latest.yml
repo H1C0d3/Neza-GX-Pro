@@ -1,8 +1,8 @@
-version: 2.2.2
+version: 3.0.0
 files:
-  - url: Neza-GX-Pro-Setup-2.2.2.exe
-    sha512: mRFgOiNpecL02TUyutzSbINnO7gvmq58lqpz/DgoQ2HrSpkmFCfFgMHpl0FWLuWUvHRIifC1hOdygSHIVCt6ag==
-    size: 83015149
-path: Neza-GX-Pro-Setup-2.2.2.exe
-sha512: mRFgOiNpecL02TUyutzSbINnO7gvmq58lqpz/DgoQ2HrSpkmFCfFgMHpl0FWLuWUvHRIifC1hOdygSHIVCt6ag==
-releaseDate: '2025-11-22T13:57:38.435Z'
+  - url: Neza-GX-Pro-Setup-3.0.0.exe
+    sha512: JKuDfElPR4MBbL/VCTEjsbi7XC3nKW3XRWa5N9JmIVyaI56QILNjOa0taloQLWktcFrp46iOXRRLRONsnsHG3w==
+    size: 83413780
+path: Neza-GX-Pro-Setup-3.0.0.exe
+sha512: JKuDfElPR4MBbL/VCTEjsbi7XC3nKW3XRWa5N9JmIVyaI56QILNjOa0taloQLWktcFrp46iOXRRLRONsnsHG3w==
+releaseDate: '2026-01-12T11:15:10.984Z'

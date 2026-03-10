@@ -1,0 +1,8 @@
+{
+  "name": "neza-gx-pro-installer",
+  "version": "2.1.0",
+  "description": "Instalador personalizado para Neza GX Pro Browser",
+  "main": "installer-main.js",
+  "author": "Hi Code Studio Tech & GEISA",
+  "license": "MIT"
+}

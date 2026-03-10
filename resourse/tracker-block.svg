@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" role="img" aria-labelledby="title desc">
+  <title>Bloqueador antirrastreo</title>
+  <desc>Ícono de ojo tachado con línea roja diagonal</desc>
+  <g fill="none" fill-rule="evenodd" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 24s6.5-11 18-11 18 11 18 11-6.5 11-18 11S6 24 6 24Z" stroke="#111" stroke-width="3" fill="#fff"/>
+    <circle cx="24" cy="24" r="6" stroke="#111" stroke-width="3" fill="#fff"/>
+    <circle cx="24" cy="24" r="2.5" fill="#111"/>
+    <path d="M9 8l30 32" stroke="#d8212d" stroke-width="4"/>
+  </g>
+</svg>

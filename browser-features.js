@@ -1,5 +1,5 @@
 // ============================================================================
-// NEZA BROWSER - ADVANCED FEATURES
+// NEZA GX PRO - ADVANCED FEATURES
 // Sistema de Zoom, Favoritos y Navegación
 // ============================================================================
 
@@ -726,7 +726,7 @@ let bookmarksManager = null;
 let navigationHistory = null;
 
 function initializeBrowserFeatures() {
-    console.log('🚀 Initializing Neza Browser Advanced Features...');
+    console.log('🚀 Initializing Neza GX Pro Advanced Features...');
     
     try {
         zoomController = new ZoomController();

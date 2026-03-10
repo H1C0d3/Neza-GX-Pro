@@ -1,4 +1,4 @@
-﻿# Neza Browser# Neza Browser
+﻿# Neza GX Pro# Neza GX Pro
 
 
 
@@ -168,7 +168,7 @@ npm run release### Future Enhancements
 
 
 
-# Publicar versión específicaThe Neza Browser is designed to be extensible with many innovative features planned:
+# Publicar versión específicaThe Neza GX Pro is designed to be extensible with many innovative features planned:
 
 npm version patch && npm run release
 
@@ -303,7 +303,7 @@ El sistema de actualizaciones está configurado para usar GitHub releases. Aseg�
 ## 🔒 Seguridad y Privacidad
 
 ### 🛡️ Seguridad Mejorada (v2.1.0)
-**Neza Browser implementa las mejores prácticas de seguridad de la industria:**
+**Neza GX Pro implementa las mejores prácticas de seguridad de la industria:**
 
 - ✅ **Sandbox Completo**: Aislamiento total de procesos
 - ✅ **Context Isolation**: Separación entre contextos web y Node.js
@@ -365,6 +365,15 @@ Usa el **Neza Support Center** integrado en la aplicación o:
 - [x] Panel de control de música avanzado
 - [x] Sistema de feedback y soporte
 
+## 📁 Grupos de pestañas en Chrome (dic 2025)
+
+- **Creación y personalización**: clic derecho en una pestaña → "Añadir pestaña a un nuevo grupo"; asigna nombre y color para identificarlo rápido.
+- **Colapsar y expandir**: clic en el nombre o círculo del grupo para contraer/expandir todas sus pestañas y ahorrar espacio.
+- **Gestión**: arrastra pestañas a un grupo o crea nuevas dentro; mueve un grupo completo a otra ventana; desagrupa o cierra todo el grupo de una vez.
+- **Sincronización**: los grupos se guardan y sincronizan entre dispositivos (PC/Mac/Android/iOS) con la misma cuenta de Google.
+- **Recuperación**: grupos cerrados se pueden restaurar desde "Grupos de pestañas" (menú de tres puntos) o en Android desde "Pestañas inactivas" si pasaron 14 días.
+- **Organizador con IA**: Chrome 2025 sugiere grupos automáticamente según la similitud de los sitios abiertos, reduciendo la organización manual.
+
 ## 📄 Licencia
 
 Este proyecto está bajo la Licencia MIT. Consulta el archivo LICENSE para más detalles.
@@ -396,7 +405,7 @@ Usa el **Neza Support Center** directamente desde la aplicación (F1 o menú) pa
 
 ### 🔄 Sistema de Actualizaciones Completo
 
-El nuevo sistema de actualizaciones de Neza Browser conecta directamente con GitHub para buscar, descargar e instalar actualizaciones de forma automática.
+El nuevo sistema de actualizaciones de Neza GX Pro conecta directamente con GitHub para buscar, descargar e instalar actualizaciones de forma automática.
 
 **Características principales:**
 - ✅ Verificación automática desde GitHub Releases

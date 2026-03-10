@@ -1,6 +1,6 @@
 {
   "name": "neza-gx-pro",
-  "version": "2.3.1",
+  "version": "3.0.0",
   "description": "Navegador Gaming de Nueva Generación - Neza GX Pro",
   "main": "main.js",
   "author": "Hi Code Studio Tech & GEISA",
@@ -13,11 +13,14 @@
     "start": "electron .",
     "build": "electron-builder",
     "build:win": "electron-builder --win",
-    "publish:win": "set DIST_DIR=dist&& set INSTALLER=Neza-GX-Pro-Setup-%npm_package_version%.exe&& set MANIFEST=latest.yml&& gh release create v%npm_package_version% \"%DIST_DIR%\\%INSTALLER%\" \"%DIST_DIR%\\%MANIFEST%\" --repo H1C0d3/Neza-GX-Pro --title \"Neza GX Pro %npm_package_version%\" --notes-file RELEASE-NOTES.md"
+    "publish:win": "set DIST_DIR=dist&& set INSTALLER=Neza-GX-Pro-Setup-%npm_package_version%.exe&& set MANIFEST=latest.yml&& gh release create v%npm_package_version% \"%DIST_DIR%\\%INSTALLER%\" \"%DIST_DIR%\\%MANIFEST%\" --repo H1C0d3/Neza-GX-Pro --title \"Neza GX Pro %npm_package_version%\" --notes-file release-notes.md"
   },
   "dependencies": {
+    "castv2-client": "^1.2.0",
     "electron-log": "^5.1.0",
-    "electron-updater": "^6.1.7"
+    "electron-updater": "^6.1.7",
+    "multicast-dns": "^7.2.5",
+    "pidusage": "^4.0.1"
   },
   "devDependencies": {
     "electron": "^28.0.0",
